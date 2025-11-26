@@ -26,7 +26,7 @@ export default function AuthForm(props: AuthFormProps) {
   const register = useAuthStore((state) => state.register);
   const login = useAuthStore((state) => state.login);
   return (
-    <div className="max-w-md mx-auto mt-10">
+    <div className="max-w-md mx-auto mt-10 flex flex-col">
       <h1 className="text-2xl font-bold mb-4">{props.title}</h1>
       <Formik
         initialValues={props.initialValues}
@@ -39,7 +39,7 @@ export default function AuthForm(props: AuthFormProps) {
               await register(values.name || "", values.email, values.password);
             }
             alert("Успішно!");
-            router.push("/book");
+            router.push("/books");
           } catch (error: any) {
             alert(error.message);
           } finally {
@@ -48,14 +48,14 @@ export default function AuthForm(props: AuthFormProps) {
         }}
       >
         {({ isSubmitting }) => (
-          <Form className="flex flex-col gap-4">
+          <Form className="flex flex-col  gap-4 border p-6 rounded-lg shadow-md text-white bg-gray-800">
             {props.method === "register" && (
               <div>
                 <Field
                   name="name"
                   type="text"
                   placeholder="Ім'я"
-                  className="input"
+                  className="border p-2 w-full rounded"
                 />
                 <ErrorMessage
                   name="name"
@@ -69,7 +69,7 @@ export default function AuthForm(props: AuthFormProps) {
                 name="email"
                 type="email"
                 placeholder="Email"
-                className="input"
+                className="border p-2 w-full rounded"
               />
               <ErrorMessage
                 name="email"
@@ -82,7 +82,7 @@ export default function AuthForm(props: AuthFormProps) {
                 name="password"
                 type="password"
                 placeholder="Пароль"
-                className="input"
+                className="border p-2 w-full rounded"
               />
               <ErrorMessage
                 name="password"
@@ -93,10 +93,33 @@ export default function AuthForm(props: AuthFormProps) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="btn-primary"
+              className="bg-green-400 text-white p-2 rounded hover:bg-green-500 transition"
             >
               {props.buttonText}
             </button>
+            {props.method === "login" ? (
+              <div className="text-sm mt-2 flex justify-center gap-2">
+                Немає акаунту?
+                <a
+                  href="/auth/register"
+                  className="text-blue-500 hover:underline"
+                >
+                  Зареєструватися
+                </a>
+              </div>
+            ) : (
+              <div className="text-sm mt-2 flex justify-center gap-2">
+                Вже є акаунт?
+                <a
+                  href="/auth/login"
+                  className="text-blue-500 hover:underline"
+                >
+                  Увійти
+                </a>
+              </div>
+            )
+            
+            }
           </Form>
         )}
       </Formik>

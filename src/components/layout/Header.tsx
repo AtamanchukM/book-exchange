@@ -1,8 +1,28 @@
 "use client";
 import { useAuthStore } from "@/stores/useAuthStore";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  where,
+  query,
+  startAt,
+  endAt,
+} from "firebase/firestore";
 import { db } from "@/lib/firebase/firebase";
 import { useEffect, useState } from "react";
+import ProtectedRoute from "../ProtectedRoute";
+
+export async function searchBooks(term: string) {
+  const booksRef = collection(db, "books");
+  const q = query(
+    booksRef,
+    where("keywords", "array-contains", term.toLowerCase())
+  );
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+}
 
 export default function Header() {
   const user = useAuthStore((state) => state.user);
@@ -21,16 +41,26 @@ export default function Header() {
     };
 
     fetchUserName();
-  }, [user]);   
+  }, [user]);
 
   return (
     <header className="w-full bg-amber-200 p-4">
       <nav className="max-w-7xl mx-auto flex justify-end items-center gap-4">
-        {user && (
-          <span className="mr-4">
-            Привіт, {userName} {user.role}
-          </span>
-        )}
+        <ProtectedRoute>
+          <div className="flex gap-4 items-center">
+            <div className="flex gap-2 items-center">
+              <input
+                type="text"
+                placeholder="search book"
+                className="p-2 rounded border  focus:outline-none"
+              />
+              <button>Search</button>
+            </div>
+            <span className="mr-4">
+              Привіт, {userName} {user?.role}
+            </span>
+          </div>
+        </ProtectedRoute>
         <button onClick={logout} className="">
           Вийти
         </button>
