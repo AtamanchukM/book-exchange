@@ -6,6 +6,7 @@ import {
 } from "firebase/auth";
 import { auth, db } from "@/lib/firebase/firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
+import { useRouter } from "next/navigation";
 
 interface AuthUser {
   uid: string;
@@ -28,6 +29,7 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>()(
+
   persist(
     (set) => ({
       user: null,

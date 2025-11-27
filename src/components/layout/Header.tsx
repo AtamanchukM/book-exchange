@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/firebase";
 import { useEffect, useState } from "react";
-import ProtectedRoute from "../ProtectedRoute";
+import ProtectedRoute from "../../route/ProtectedRoute";
 import { useRouter } from "next/navigation";
 import Link from "next/dist/client/link";
 
@@ -47,16 +47,14 @@ export default function Header() {
             <span className="mr-4">
               Привіт, {user?.name} {user?.role}
             </span>
-           <Link href="/books">All books</Link>
+            <Link href="/books">All books</Link>
             <Link href="/me/books">My books</Link>
           </div>
         )}
         <button onClick={logout} className="">
           Вийти
         </button>
-        {user?.role === "admin" && (
-          <Link href="/admiPanel">Admin Panel</Link>
-        )}
+        {user?.role === "admin" && <Link href="/adminPanel">Admin Panel</Link>}
       </nav>
     </header>
   );

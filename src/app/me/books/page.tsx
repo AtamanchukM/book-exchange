@@ -6,6 +6,7 @@ import type { BookData } from "@/types/book";
 import { addBook } from "@/services/addBook";
 import { deleteBook } from "@/services/deleteBook";
 import Link from "next/dist/client/link";
+import BookList from "@/components/books/BookList";
 
 export default function Mybooks() {
   const [books, setBooks] = useState<BookData[]>([]);
@@ -30,31 +31,20 @@ export default function Mybooks() {
   return (
     <div>
       My Books Page
-      <ul className="flex gap-4">
-        {books.map((book: BookData) => (
-          <li key={book.id} className="text-white mb-2 border p-4 rounded">
-            <h2 className="text-xl font-semibold">{book.name}</h2>
-            <p className="text-gray-300">Автор: {book.author}</p>
-            <p>Власник: {book.ownerName}</p>
-            <Link
-              href={`/books/${book.id}`}
-              className="border py-2 px-4 bg-green-400 flex w-fit "
-            >
-              Details
-            </Link>
-
-            <button
-              onClick={async () => {
-                await deleteBook(book.id);
-                await fetchUserBooks();
-              }}
-              className="border border-red-600 px-2 py-1 rounded bg-red-400"
-            >
-              Delete Book
-            </button>
-          </li>
-        ))}
-      </ul>
+      <BookList
+        books={books}
+        renderActions={(book) => (
+          <button
+            onClick={async () => {
+              await deleteBook(book.id);
+              await fetchUserBooks();
+            }}
+            className="border border-red-600 px-2 py-1 rounded bg-red-400"
+          >
+            Delete Book
+          </button>
+        )}
+      />
       <input
         type="text"
         className="border"

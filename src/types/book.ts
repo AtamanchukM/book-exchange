@@ -4,6 +4,7 @@ export interface BookData {
   author: string;
   photoUrl?: string;
   createdAt: string;
+  ownerEmail: string;
   ownerId: string;
   ownerName: string;
 }

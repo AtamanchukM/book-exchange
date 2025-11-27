@@ -14,6 +14,7 @@ export const addBook = async (bookData: BookData) => {
       createdAt: new Date(),
       ownerName: user.name,
       ownerId: user.uid,
+      ownerEmail: user.email,
     });
     console.log("Книга успішно додана з ID: ", bookData.id);
     return bookData.id;
