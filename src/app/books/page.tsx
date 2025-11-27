@@ -11,6 +11,7 @@ import { addBook } from "@/services/addBook";
 import { deleteBook } from "@/services/deleteBook";
 import type { BookData } from "@/types/book";
 import { useAuthStore } from "@/stores/useAuthStore";
+import Link from "next/link";
 
 // export const addBook = async (bookData: BookData) => {
 //   try {
@@ -29,10 +30,10 @@ import { useAuthStore } from "@/stores/useAuthStore";
 // };
 
 export default function Books() {
-  const [bookName, setBookName] = useState("");
-  const [author, setAuthor] = useState("");
+  // const [bookName, setBookName] = useState("");
+  // const [author, setAuthor] = useState("");
   const [books, setBooks] = useState<BookData[]>([]);
-  const ownerName = useAuthStore((state) => state.user?.name || '');
+  const ownerName = useAuthStore((state) => state.user?.name || "");
   const router = useRouter();
 
   useEffect(() => {
@@ -50,15 +51,8 @@ export default function Books() {
                 <h2 className="text-xl font-semibold">{book.name}</h2>
                 <p className="text-gray-300">Автор: {book.author}</p>
                 <p>Власник: {book.ownerName}</p>
-                <button
-                  onClick={() => {
-                    router.push(`/books/${book.id}`);
-                  }}
-                  className="border border-green-600 px-2 py-1 rounded bg-green-400"
-                >
-                  Details
-                </button>
-                <button
+                    <Link href={`/books/${book.id}`} className="border py-2 px-4 bg-green-400 flex w-fit ">Details</Link>
+                {/* <button
                   onClick={async () => {
                     await deleteBook(book.id);
                     const updatedBooks = await fetchBooks();
@@ -67,13 +61,13 @@ export default function Books() {
                   className="border border-red-600 px-2 py-1 rounded bg-red-400"
                 >
                   Delete Book
-                </button>
+                </button> */}
               </li>
             ))}
           </ul>
         </div>
 
-        <input
+        {/* <input
           type="text"
           className="border"
           value={bookName}
@@ -86,9 +80,9 @@ export default function Books() {
           value={author}
           onChange={(e) => setAuthor(e.target.value)}
           placeholder="Author"
-        />
+        /> */}
 
-        <button
+        {/* <button
           onClick={async () => {
             await addBook({
               id: `${Math.floor(Math.random() * 10000)}`,
@@ -102,7 +96,7 @@ export default function Books() {
           }}
         >
           Add Book
-        </button>
+        </button> */}
       </Container>
     </ProtectedRoute>
   );

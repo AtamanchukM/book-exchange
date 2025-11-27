@@ -13,6 +13,8 @@ import {
 import { db } from "@/lib/firebase/firebase";
 import { useEffect, useState } from "react";
 import ProtectedRoute from "../ProtectedRoute";
+import { useRouter } from "next/navigation";
+import Link from "next/dist/client/link";
 
 // export async function searchBooks(term: string) {
 //   const booksRef = collection(db, "books");
@@ -27,15 +29,13 @@ import ProtectedRoute from "../ProtectedRoute";
 export default function Header() {
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
-  const ownerName = useAuthStore((state) => state.user?.name || '');
-
+  const route = useRouter();
 
   return (
     <header className="w-full bg-amber-200 p-4">
       <nav className="max-w-7xl mx-auto flex justify-end items-center gap-4">
-        {/* <ProtectedRoute> */}
-          {user && (
-            <div className="flex gap-4 items-center">
+        {user && (
+          <div className="flex gap-4 items-center">
             <div className="flex gap-2 items-center">
               <input
                 type="text"
@@ -47,16 +47,15 @@ export default function Header() {
             <span className="mr-4">
               Привіт, {user?.name} {user?.role}
             </span>
+           <Link href="/books">All books</Link>
+            <Link href="/me/books">My books</Link>
           </div>
         )}
-        {/* </ProtectedRoute> */}
         <button onClick={logout} className="">
           Вийти
         </button>
         {user?.role === "admin" && (
-          <a href="/admin" className="ml-4">
-            Адмін панель
-          </a>
+          <Link href="/admiPanel">Admin Panel</Link>
         )}
       </nav>
     </header>
