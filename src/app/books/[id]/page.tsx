@@ -1,20 +1,20 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/firebase";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { sendBookExchangeEmail } from "@/services/bookExchange";
-import BookList from "@/components/books/BookList";
-import { fetchBooks } from "@/services/fetchBooks";
+import { useBooks } from "@/hooks/useBooks";
+import Image from "next/image";
 
 export default function BookDetailsPage() {
   const { id } = useParams(); // отримуємо id з URL
   const [book, setBook] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const user = useAuthStore((s) => s.user);
-  const [books, setBooks] = useState<any[]>([]);
+  const { books } = useBooks();
 
 
   useEffect(() => {
@@ -30,19 +30,8 @@ export default function BookDetailsPage() {
     fetchBook();
   }, [id]);
 
-  const fetchUserBooks = async () => {
-    const allBooks = await fetchBooks();
-    if (user) {
-      setBooks(allBooks.filter((book) => book.ownerId === user.uid));
-    }
-  };
 
-  useEffect(() => {
-    const loadBooks = async () => {
-      await fetchUserBooks();
-    };
-    loadBooks();
-  }, [user]);
+  const userBooks = user ? books.filter((b) => b.ownerId === user.uid) : [];
 
   if (loading) return <div>Завантаження...</div>;
   if (!book) return <div>Книгу не знайдено</div>;
@@ -57,7 +46,7 @@ export default function BookDetailsPage() {
         user,
         book,
         toEmail: book.ownerEmail,
-        offeredBooks: books, // TODO: replace with actual offered books if needed
+        offeredBooks: userBooks, // тільки книги користувача
       });
       alert("Запит на обмін відправлено!");
     } catch {
@@ -67,7 +56,8 @@ export default function BookDetailsPage() {
 
   return (
     <div className="p-4 border rounded shadow-md flex flex-col gap-4 w-fit m-auto mt-10 bg-gray-700">
-      <h1 className="text-2xl font-bold">{book.name}</h1>
+      <Image src={book.photoUrl} alt={book.name} width={200} height={300} />
+      <h2 className="text-2xl font-bold">{book.name}</h2>
       <p>Автор: {book.author}</p>
       <p>Власник: {book.ownerName}</p>
 

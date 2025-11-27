@@ -1,35 +1,16 @@
 "use client";
 import { useAuthStore } from "@/stores/useAuthStore";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  where,
-  query,
-  startAt,
-  endAt,
-} from "firebase/firestore";
-import { db } from "@/lib/firebase/firebase";
-import { useEffect, useState } from "react";
-import ProtectedRoute from "../../route/ProtectedRoute";
-import { useRouter } from "next/navigation";
-import Link from "next/dist/client/link";
 
-// export async function searchBooks(term: string) {
-//   const booksRef = collection(db, "books");
-//   const q = query(
-//     booksRef,
-//     where("keywords", "array-contains", term.toLowerCase())
-//   );
-//   const snapshot = await getDocs(q);
-//   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-// }
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useSearchStore } from "@/stores/useSearchStore";
 
 export default function Header() {
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   const route = useRouter();
+  const query = useSearchStore((s) => s.query);
+  const setQuery = useSearchStore((s) => s.setQuery);
 
   return (
     <header className="w-full bg-amber-200 p-4">
@@ -40,9 +21,10 @@ export default function Header() {
               <input
                 type="text"
                 placeholder="search book"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
                 className="p-2 rounded border  focus:outline-none"
               />
-              <button>Search</button>
             </div>
             <span className="mr-4">
               Привіт, {user?.name} {user?.role}
@@ -51,7 +33,13 @@ export default function Header() {
             <Link href="/me/books">My books</Link>
           </div>
         )}
-        <button onClick={logout} className="">
+        <button
+          onClick={() => {
+            logout();
+            route.push("/login");
+          }}
+          className=""
+        >
           Вийти
         </button>
         {user?.role === "admin" && <Link href="/adminPanel">Admin Panel</Link>}

@@ -20,7 +20,6 @@ export default function ProtectedAdmin({
   useEffect(() => {
     if (mounted && !(user?.role === "admin")) {
       router.push("/books");
-    //   useAuthStore.getState().logout();
     }
   }, [mounted, user, router]);
 

@@ -1,63 +1,35 @@
 "use client";
-import { fetchBooks } from "@/services/fetchBooks";
-import type { BookData } from "@/types/book";
-import { useState, useEffect } from "react";
-import { deleteBook } from "@/services/deleteBook";
 import ProtectedAdmin from "@/route/ProtectedAdmin";
 import BookList from "@/components/books/BookList";
+import Container from "@/components/common/Container";
+import { useBooks } from "@/hooks/useBooks";
+import Details from "@/components/common/Details";
+import DeleteBook from "@/components/common/DeleteBook";
+import { useSearchStore } from "@/stores/useSearchStore";
 
 export default function AdminPanel() {
-  const [books, setBooks] = useState<BookData[]>([]);
+  const { books } = useBooks();
+  const query = useSearchStore((s) => s.query);
+  const filteredBooks = books.filter(
+    (book) =>
+      book.name.toLowerCase().includes(query.toLowerCase()) ||
+      book.author.toLowerCase().includes(query.toLowerCase())
+  );
 
-  useEffect(() => {
-    const loadBooks = async () => {
-      const allBooks = await fetchBooks();
-      setBooks(allBooks);
-    };
-    loadBooks();
-  }, []);
   return (
     <ProtectedAdmin>
-      <div>
-        Admin Panel Page
+      <Container>
+        <h1>Admin Panel</h1>
         <BookList
-          books={books}
+          books={filteredBooks}
           renderActions={(book) => (
-            <button
-              onClick={async () => {
-                await deleteBook(book.id);
-                const allBooks = await fetchBooks();
-                setBooks(allBooks);
-              }}
-              className="border border-red-600 px-2 py-1 rounded bg-red-400"
-            >
-              Delete Book
-            </button>
+            <div className="flex flex-col justify-center gap-2">
+              <DeleteBook id={book.id} />
+              <Details id={book.id} />
+            </div>
           )}
         />
-      </div>
+      </Container>
     </ProtectedAdmin>
   );
-}
-
-{
-  /* <ul className="flex gap-4 flex-wrap">
-            {books.map((book: BookData) => (
-              <li key={book.id} className="text-white mb-2 border p-4 rounded">
-                <h2 className="text-xl font-semibold">{book.name}</h2>
-                <p className="text-gray-300">Автор: {book.author}</p>
-                <p>Власник: {book.ownerName}</p>
-                <button
-                  onClick={async () => {
-                    await deleteBook(book.id);
-                    const allBooks = await fetchBooks();
-                    setBooks(allBooks);
-                  }}
-                  className="border border-red-600 px-2 py-1 rounded bg-red-400"
-                >
-                  Delete Book
-                </button>
-              </li>
-            ))}
-          </ul> */
 }

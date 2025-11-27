@@ -1,11 +1,8 @@
-import emailjs from "@emailjs/browser"; // user: { email: string, displayName?: string }
-// book: { name: string }
-// offeredBooks: Array<{ name: string }>
+import emailjs from "@emailjs/browser";
 export async function sendBookExchangeEmail({
   user,
   book,
   offeredBooks,
-  fromEmail,
   toEmail,
 }: {
   user: { email: string; name?: string };

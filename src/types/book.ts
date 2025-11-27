@@ -1,10 +1,10 @@
 export interface BookData {
   id: string;
-  name: string;
+  name: string ;
   author: string;
   photoUrl?: string;
   createdAt: string;
-  ownerEmail: string;
+  ownerEmail?: string;
   ownerId: string;
   ownerName: string;
 }
