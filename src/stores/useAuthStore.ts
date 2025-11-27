@@ -57,6 +57,7 @@ export const useAuthStore = create<AuthState>()(
             user: {
               uid: res.user.uid,
               email: res.user.email!,
+              name: name,
               role: "user",
               token,
             },
@@ -76,9 +77,16 @@ export const useAuthStore = create<AuthState>()(
           // Отримуємо роль з Firestore
           const userDoc = await getDoc(doc(db, "users", res.user.uid));
           const role = userDoc.exists() ? userDoc.data().role : "user";
+          const name = userDoc.exists() ? userDoc.data().name : "";
 
           set({
-            user: { uid: res.user.uid, email: res.user.email!, role, token },
+            user: {
+              uid: res.user.uid,
+              email: res.user.email!,
+              name: name,
+              role,
+              token,
+            },
             loading: false,
           });
         } catch (error: any) {

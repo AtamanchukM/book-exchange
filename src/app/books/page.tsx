@@ -2,42 +2,38 @@
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Container from "@/components/common/Container";
 import { booksCollection } from "@/lib/firebase/firebase";
-import { addDoc, getDocs, setDoc, doc } from "@firebase/firestore";
+import { addDoc, getDocs, getDoc, setDoc, doc } from "@firebase/firestore";
+import { db } from "@/lib/firebase/firebase";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { fetchBooks } from "@/services/fetchBooks";
+import { addBook } from "@/services/addBook";
+import { deleteBook } from "@/services/deleteBook";
+import type { BookData } from "@/types/book";
+import { useAuthStore } from "@/stores/useAuthStore";
 
-interface BookData {
-  id: string;
-  name: string;
-  author: string;
-  photoUrl?: string;
-  createdAt: string;
-  ownerName: string;
-}
-
-export const addBook = async (bookData: BookData) => {
-  try {
-    // ВАЖЛИВО: Користувач повинен бути авторизований для цієї операції!
-    // Використовуємо setDoc, щоб id документа збігався з id книги
-    await setDoc(doc(booksCollection, bookData.id), {
-      ...bookData,
-      createdAt: new Date(),
-    });
-    console.log("Книга успішно додана з ID: ", bookData.id);
-    return bookData.id;
-  } catch (e) {
-    console.error("Помилка при додаванні книги: ", e);
-    throw e;
-  }
-};
+// export const addBook = async (bookData: BookData) => {
+//   try {
+//     // ВАЖЛИВО: Користувач повинен бути авторизований для цієї операції!
+//     // Використовуємо setDoc, щоб id документа збігався з id книги
+//     await setDoc(doc(booksCollection, bookData.id), {
+//       ...bookData,
+//       createdAt: new Date(),
+//     });
+//     console.log("Книга успішно додана з ID: ", bookData.id);
+//     return bookData.id;
+//   } catch (e) {
+//     console.error("Помилка при додаванні книги: ", e);
+//     throw e;
+//   }
+// };
 
 export default function Books() {
   const [bookName, setBookName] = useState("");
   const [author, setAuthor] = useState("");
   const [books, setBooks] = useState<BookData[]>([]);
+  const ownerName = useAuthStore((state) => state.user?.name || '');
   const router = useRouter();
-
 
   useEffect(() => {
     fetchBooks().then(setBooks);
@@ -57,11 +53,20 @@ export default function Books() {
                 <button
                   onClick={() => {
                     router.push(`/books/${book.id}`);
-                    console.log("Clicked Details for book id:", book);
                   }}
                   className="border border-green-600 px-2 py-1 rounded bg-green-400"
                 >
                   Details
+                </button>
+                <button
+                  onClick={async () => {
+                    await deleteBook(book.id);
+                    const updatedBooks = await fetchBooks();
+                    setBooks(updatedBooks);
+                  }}
+                  className="border border-red-600 px-2 py-1 rounded bg-red-400"
+                >
+                  Delete Book
                 </button>
               </li>
             ))}
@@ -90,7 +95,7 @@ export default function Books() {
               name: bookName,
               author: author,
               createdAt: new Date().toISOString(),
-              ownerName: "babaZhaba",
+              ownerName: ownerName,
             });
             const books = await fetchBooks();
             setBooks(books);
