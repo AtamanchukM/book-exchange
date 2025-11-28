@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail 
 } from "firebase/auth";
 import { auth, db } from "@/lib/firebase/firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
@@ -11,6 +12,7 @@ interface AuthUser {
   uid: string;
   name?: string;
   email: string;
+  restoreEmail?: string;
   role?: string;
   token?: string;
 }
@@ -19,9 +21,11 @@ interface AuthState {
   user: AuthUser | null;
   loading: boolean;
   error: string | null;
+  success?: string | null;
   register: (name: string, email: string, password: string) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  restore: (email: string) => Promise<void>;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   resetAuth: () => void;
@@ -34,6 +38,7 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       loading: false,
       error: null,
+      success: null,
 
       register: async (name, email, password) => {
         set({ loading: true, error: null });
@@ -69,6 +74,8 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
+
+
       login: async (email, password) => {
         set({ loading: true, error: null });
         try {
@@ -92,6 +99,16 @@ export const useAuthStore = create<AuthState>()(
           });
         } catch (error: any) {
           set({ error: error.message, loading: false });
+        }
+      },
+
+      restore: async (restoreEmail) => {
+        set({ loading: true, error: null, success: null });
+        try {
+          await sendPasswordResetEmail(auth, restoreEmail);
+          set({ loading: false, success: "Лист для відновлення паролю надіслано на вашу електронну пошту." });
+        } catch (error: any) {
+          set({ error: error.message, loading: false, success: null });
         }
       },
 

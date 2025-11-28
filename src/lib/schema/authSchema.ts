@@ -16,8 +16,8 @@ export const loginSchema = Yup.object({
 });
 
 export const restoreSchema = Yup.object({
-  email: Yup.string().email("Некоректний email").required("Email обов’язковий"),
-  newPassword: Yup.string()
-    .min(6, "Мінімум 6 символів")
-    .required("Новий пароль обов’язковий"),
+  emailRestore: Yup.string()
+    .email("Некоректний email")
+    .required("Email обов’язковий")
+
 });

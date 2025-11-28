@@ -36,7 +36,7 @@ export default function Header() {
         <button
           onClick={() => {
             logout();
-            route.push("/login");
+            route.push("/auth/login");
           }}
           className=""
         >
