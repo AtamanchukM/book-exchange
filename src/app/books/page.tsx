@@ -6,9 +6,8 @@ import { useBooks } from "@/hooks/useBooks";
 import Details from "@/components/common/Details";
 import { useSearchStore } from "@/stores/useSearchStore";
 
-
 export default function Books() {
-  const { books } = useBooks();
+  const { books, loading, hasMore, loadMore } = useBooks();
   const query = useSearchStore((s) => s.query);
 
   const filteredBooks = books.filter(
@@ -23,6 +22,9 @@ export default function Books() {
 
         <BookList
           books={filteredBooks}
+          loading={loading}
+          hasMore={hasMore}
+          loadMore={loadMore}
           renderActions={(book) => <Details id={book.id} />}
         />
       </Container>

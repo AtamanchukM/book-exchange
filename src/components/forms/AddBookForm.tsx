@@ -1,9 +1,14 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { addBookSchema } from "@/lib/schema/addBookSchema";
-import { addBook } from "@/services/addBook";
+import { addBook as addBookService } from "@/services/addBook";
 import Container from "@/components/common/Container";
 import { useAuthStore } from "@/stores/useAuthStore";
-export default function AddBookForm() {
+
+type AddBookFormProps = {
+  onAdd?: (book: any) => void;
+};
+
+export default function AddBookForm({ onAdd }: AddBookFormProps) {
   const user = useAuthStore((state) => state.user);
 
   return (
@@ -13,7 +18,7 @@ export default function AddBookForm() {
           initialValues={{ name: "", author: "", photoUrl: "" }}
           validationSchema={addBookSchema}
           onSubmit={async (values, { resetForm }) => {
-            await addBook({
+            const newBook = {
               id: `${Math.floor(Math.random() * 10000)}`,
               photoUrl: values.photoUrl,
               name: values.name,
@@ -21,7 +26,9 @@ export default function AddBookForm() {
               createdAt: new Date().toISOString(),
               ownerId: user?.uid || "",
               ownerName: user?.name || "",
-            });
+            };
+            await addBookService(newBook);
+            if (onAdd) onAdd(newBook);
             resetForm();
           }}
         >

@@ -1,18 +1,12 @@
-import { useBooks } from "@/hooks/useBooks";
 import { deleteBook } from "@/services/deleteBook";
-export default function DeleteBook(id: any) {
-  const { books } = useBooks();
-  const book = books.find((b) => b.id === id.id)!;
-  if (!book) {
-    return <div>Loading...</div>;
-  }
-  function handleDelete() {
-    deleteBook(book.id);
-  }
+export default function DeleteBook({ id, onDelete }: { id: string, onDelete: (id: string) => void }) {
+
+  const handleDelete = async () => {
+    await deleteBook(id);
+    if (onDelete) onDelete(id);
+  };
 
   return (
-    <button className="bg-red-400 hover:bg-red-600 transition-all cursor-pointer py-2 px-4 rounded" onClick={() => handleDelete()}>
-      Delete Book
-    </button>
+    <button onClick={handleDelete} className="bg-red-500 hover:bg-red-700 transition-all text-white px-4 py-2 rounded">Delete Book</button>
   );
 }

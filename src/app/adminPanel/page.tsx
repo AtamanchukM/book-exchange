@@ -12,7 +12,8 @@ import { useEffect, useState } from "react";
 
 export default function AdminPanel() {
   const [users, setUsers] = useState([]);
-  const { books } = useBooks();
+  const { books, loading, hasMore, loadMore, setReloadTrigger, reloadTrigger } =
+    useBooks(3);
   const query = useSearchStore((s) => s.query);
   const filteredBooks = books.filter(
     (book) =>
@@ -40,10 +41,18 @@ export default function AdminPanel() {
           Users: {users.map((user) => user.name).join(", ")}
         </span>
         <BookList
+          loading={loading}
+          hasMore={hasMore}
+          loadMore={loadMore}
           books={filteredBooks}
           renderActions={(book) => (
             <div className="flex flex-col justify-center gap-2">
-              <DeleteBook id={book.id} />
+              <DeleteBook
+                id={book.id}
+                onDelete={() => {
+                  setReloadTrigger(reloadTrigger + 1);
+                }}
+              />
               <Details id={book.id} />
             </div>
           )}

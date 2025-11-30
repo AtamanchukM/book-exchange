@@ -1,40 +1,49 @@
+import {
+  collection,
+  query,
+  orderBy,
+  limit,
+  startAfter,
+  getDocs,
+  DocumentData,
+  QueryDocumentSnapshot,
+} from "firebase/firestore";
+import { BookData } from "@/types/book";
+// Припускаємо, що 'db' - це ваш екземпляр Firestore
+// const db = getFirestore(app);
+import { db } from "@/lib/firebase/firebase"; // Замініть на ваш шлях до конфігурації Firebase
 
-import { booksCollection } from "@/lib/firebase/firebase";
-import { getDocs, query, orderBy, startAfter, limit, getFirestore, collection } from "@firebase/firestore";
-import type { BookData } from "@/types/book";
+const booksCollection = collection(db, "books"); // Ваш об'єкт колекції
 
-export const fetchBooks = async (): Promise<BookData[]> => {
-  const querySnapshot = await getDocs(booksCollection);
+export const fetchBooks = async (
+  pageSize: number, // Кількість книг для завантаження, наприклад, 5
+  lastVisibleDoc: QueryDocumentSnapshot<DocumentData> | null = null // Останній видимий документ з попереднього завантаження
+): Promise<{
+  books: BookData[];
+  lastVisible: QueryDocumentSnapshot<DocumentData> | null;
+}> => {
+  let q;
+
+  // Базовий запит з сортуванням і лімітом
+  const baseQuery = query(booksCollection, orderBy("name"));
+
+  if (lastVisibleDoc) {
+    // Якщо є lastVisibleDoc, починаємо після нього
+    q = query(baseQuery, startAfter(lastVisibleDoc), limit(pageSize));
+  } else {
+    // Якщо це перше завантаження, просто застосовуємо ліміт
+    q = query(baseQuery, limit(pageSize));
+  }
+
+  const querySnapshot = await getDocs(q);
   const booksList: BookData[] = [];
   querySnapshot.forEach((doc) => {
     booksList.push({ ...doc.data(), id: doc.id } as BookData);
   });
-  // Сортуємо за алфавітом (name)
-  booksList.sort((a, b) => a.name.localeCompare(b.name));
-  return booksList;
+
+  // Зберігаємо останній документ, щоб використовувати його для наступного запиту
+  const newLastVisible =
+    querySnapshot.docs[querySnapshot.docs.length - 1] || null;
+
+  return { books: booksList, lastVisible: newLastVisible };
 };
-
-
-// Пагінація книг
-export async function fetchBooksPaginated({
-  pageSize = 5,
-  lastVisible = null,
-  orderField = "createdAt"
-}: {
-  pageSize?: number;
-  lastVisible?: any;
-  orderField?: string;
-} = {}) {
-  let q = query(collection(getFirestore(), "books"), orderBy(orderField), limit(pageSize));
-  if (lastVisible) {
-    q = query(collection(getFirestore(), "books"), orderBy(orderField), startAfter(lastVisible), limit(pageSize));
-  }
-  const snap = await getDocs(q);
-  const books: BookData[] = snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as BookData));
-  
-  return {
-    books,
-    lastVisible: snap.docs[snap.docs.length - 1] || null,
-    hasMore: snap.docs.length === pageSize,
-  };
-}
