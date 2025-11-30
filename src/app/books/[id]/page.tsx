@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/firebase";
 import { useAuthStore } from "@/stores/useAuthStore";
-import { sendBookExchangeEmail } from "@/services/bookExchange";
+import { sendBookExchangeEmail } from "@/services/bookExchange/bookExchange";
 import { useBooks } from "@/hooks/useBooks";
 import Image from "next/image";
 
@@ -14,9 +14,7 @@ export default function BookDetailsPage() {
   const [book, setBook] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const user = useAuthStore((s) => s.user);
-  const { books } = useBooks();
-
-
+  const books = useBooks().Allbooks;
   useEffect(() => {
     const fetchBook = async () => {
       if (!id) return;
@@ -29,7 +27,6 @@ export default function BookDetailsPage() {
     };
     fetchBook();
   }, [id]);
-
 
   const userBooks = user ? books.filter((b) => b.ownerId === user.uid) : [];
 

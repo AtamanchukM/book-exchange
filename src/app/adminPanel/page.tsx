@@ -3,36 +3,24 @@ import ProtectedAdmin from "@/route/ProtectedAdmin";
 import BookList from "@/components/books/BookList";
 import Container from "@/components/common/Container";
 import { useBooks } from "@/hooks/useBooks";
-import Details from "@/components/common/Details";
-import DeleteBook from "@/components/common/DeleteBook";
-import { useSearchStore } from "@/stores/useSearchStore";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/lib/firebase/firebase";
+import Details from "@/components/books/Details";
+import DeleteBook from "@/components/books/DeleteBook";
+import { useSearchStore, filteredBooks } from "@/stores/useSearchStore";
 import { useEffect, useState } from "react";
+import { fetchAllUsers } from "@/services/users/fetchAllUsers";
 
 export default function AdminPanel() {
   const [users, setUsers] = useState([]);
-  const { books, loading, hasMore, loadMore, setReloadTrigger, reloadTrigger } =
-    useBooks(3);
+  const { Allbooks, loading, hasMore, loadMore } = useBooks();
   const query = useSearchStore((s) => s.query);
-  const filteredBooks = books.filter(
-    (book) =>
-      book.name.toLowerCase().includes(query.toLowerCase()) ||
-      book.author.toLowerCase().includes(query.toLowerCase())
-  );
 
-  const fetchAllUsers = async () => {
-    const usersCol = collection(db, "users");
-    const userSnapshot = await getDocs(usersCol);
-    return userSnapshot.docs.map((doc) => doc.data());
-  };
   useEffect(() => {
     const getUsers = async () => {
       const users = await fetchAllUsers();
       setUsers(users);
     };
     getUsers();
-  }, []);
+  }, [users]);
   return (
     <ProtectedAdmin>
       <Container>
@@ -44,15 +32,10 @@ export default function AdminPanel() {
           loading={loading}
           hasMore={hasMore}
           loadMore={loadMore}
-          books={filteredBooks}
+          books={filteredBooks(Allbooks, query)}
           renderActions={(book) => (
             <div className="flex flex-col justify-center gap-2">
-              <DeleteBook
-                id={book.id}
-                onDelete={() => {
-                  setReloadTrigger(reloadTrigger + 1);
-                }}
-              />
+              <DeleteBook id={book.id} />
               <Details id={book.id} />
             </div>
           )}

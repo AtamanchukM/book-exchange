@@ -1,41 +1,49 @@
 import { useEffect, useState } from "react";
-import { fetchUserBooks } from "@/services/fetchUserBooks";
+import { fetchUserBooks } from "@/services/books/fetchUserBooks";
+import { create } from "zustand";
 import type { BookData } from "@/types/book";
+export const useUserBooksStore = create<{
+  books: BookData[];
+  setBooks: (books: BookData[]) => void;
+}>((set) => ({
+  books: [],
+  setBooks: (books) => set({ books }),
+}));
 
 export function useUserBooks(userId: string | undefined, pageSize: number = 3) {
-  const [books, setBooks] = useState<BookData[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastVisible, setLastVisible] = useState<any>(null);
+  const books = useUserBooksStore((s) => s.books);
+  const setBooks = useUserBooksStore((s) => s.setBooks);
 
   useEffect(() => {
-    if (!userId) {
-      setBooks([]);
-      setLoading(false);
-      return;
-    }
+    let ignore = false;
     const loadInitial = async () => {
+      if (!userId) {
+        if (!ignore) setBooks([]);
+        setLoading(false);
+        return;
+      }
       setLoading(true);
       const { books: initialBooks, lastVisible: initialLastVisible } = await fetchUserBooks(userId, pageSize);
-      setBooks(initialBooks);
+      if (!ignore) setBooks(initialBooks);
       setLastVisible(initialLastVisible);
       setLoading(false);
     };
     loadInitial();
-  }, [userId, pageSize]);
+    return () => { ignore = true; };
+  }, [userId, pageSize, setBooks]);
 
   const loadMore = async () => {
     if (!userId || !lastVisible) return;
     setLoading(true);
     const { books: nextBooks, lastVisible: nextLastVisible } = await fetchUserBooks(userId, pageSize, lastVisible);
-    setBooks((prev) => [...prev, ...nextBooks]);
+    setBooks([...books, ...nextBooks]);
     setLastVisible(nextLastVisible);
     setLoading(false);
   };
 
   const hasMore = !!lastVisible;
 
-  const addBook = (book: BookData) => setBooks((prev) => [book, ...prev]);
-  const removeBook = (id: string) => setBooks((prev) => prev.filter((b) => b.id !== id));
-
-  return { books, loading, loadMore, hasMore, addBook, removeBook };
+  return { books, loading, loadMore, hasMore };
 }

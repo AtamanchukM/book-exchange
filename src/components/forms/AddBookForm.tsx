@@ -1,14 +1,12 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { addBookSchema } from "@/lib/schema/addBookSchema";
-import { addBook as addBookService } from "@/services/addBook";
+import { addBook  } from "@/services/books/addBook";
 import Container from "@/components/common/Container";
 import { useAuthStore } from "@/stores/useAuthStore";
 
-type AddBookFormProps = {
-  onAdd?: (book: any) => void;
-};
 
-export default function AddBookForm({ onAdd }: AddBookFormProps) {
+
+export default function AddBookForm() {
   const user = useAuthStore((state) => state.user);
 
   return (
@@ -27,8 +25,8 @@ export default function AddBookForm({ onAdd }: AddBookFormProps) {
               ownerId: user?.uid || "",
               ownerName: user?.name || "",
             };
-            await addBookService(newBook);
-            if (onAdd) onAdd(newBook);
+            await addBook(newBook);
+            console.log(books)
             resetForm();
           }}
         >

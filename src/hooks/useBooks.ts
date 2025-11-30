@@ -1,25 +1,34 @@
 import { useEffect, useState } from "react";
-import { fetchBooks } from "@/services/fetchBooks";
+import { fetchBooks } from "@/services/books/fetchBooks";
 import type { BookData } from "@/types/book";
+import { create } from "zustand";
+
+export const useBooksStore = create<{
+  Allbooks: BookData[];
+  setAllBooks: (books: BookData[]) => void;
+}>((set) => ({
+  Allbooks: [],
+  setAllBooks: (books) => set({ Allbooks: books }),
+}));
 
 export function useBooks(pageSize: number = 3) {
-  const [books, setBooks] = useState<BookData[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastVisible, setLastVisible] = useState<any>(null);
   const [reloadTrigger, setReloadTrigger] = useState(0);
+  const Allbooks = useBooksStore((s) => s.Allbooks);
+  const setAllBooks = useBooksStore((s) => s.setAllBooks);
 
   useEffect(() => {
     const loadInitial = async () => {
       setLoading(true);
       const { books: initialBooks, lastVisible: initialLastVisible } =
         await fetchBooks(pageSize);
-      setBooks(initialBooks);
+      setAllBooks(initialBooks);
       setLastVisible(initialLastVisible);
       setLoading(false);
     };
     loadInitial();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageSize, reloadTrigger]);
+  }, [pageSize, reloadTrigger, setAllBooks]);
 
   const loadMore = async () => {
     if (!lastVisible) return;
@@ -28,12 +37,19 @@ export function useBooks(pageSize: number = 3) {
       pageSize,
       lastVisible
     );
-    setBooks((prev) => [...prev, ...nextBooks]);
+    setAllBooks([...Allbooks, ...nextBooks]);
     setLastVisible(nextLastVisible);
     setLoading(false);
   };
 
   const hasMore = !!lastVisible;
 
-  return { books, loading, loadMore, hasMore, setReloadTrigger, reloadTrigger };
+  return {
+    Allbooks,
+    loading,
+    loadMore,
+    hasMore,
+    setReloadTrigger,
+    reloadTrigger,
+  };
 }
