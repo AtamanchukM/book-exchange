@@ -26,15 +26,34 @@ export default function Header() {
                   onChange={(e) => setQuery(e.target.value)}
                   className="p-2 rounded-lg border border-blue-400 bg-gray-800 text-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition placeholder:text-gray-400 w-full sm:w-72"
                 />
-               
               </div>
               <div className="hidden sm:block h-8 border-l border-blue-400 mx-6"></div>
               <div className="flex gap-4 items-center mt-2 sm:mt-0">
-                <Link href="/books" className="px-4 py-1 rounded hover:bg-blue-900 transition text-blue-100 font-medium">Всі книги</Link>
-                <Link href="/me/books" className="px-4 py-1 rounded hover:bg-blue-900 transition text-blue-100 font-medium">Мої книги</Link>
-                <Link href="/profile" className="px-4 py-1 rounded hover:bg-blue-900 transition text-blue-100 font-medium">Профіль</Link>
+                <Link
+                  href="/books"
+                  className="px-4 py-1 rounded hover:bg-blue-900 transition text-blue-100 font-medium"
+                >
+                  Всі книги
+                </Link>
+                <Link
+                  href="/me/books"
+                  className="px-4 py-1 rounded hover:bg-blue-900 transition text-blue-100 font-medium"
+                >
+                  Мої книги
+                </Link>
+                <Link
+                  href="/profile"
+                  className="px-4 py-1 rounded hover:bg-blue-900 transition text-blue-100 font-medium"
+                >
+                  Профіль
+                </Link>
                 {user?.role === "admin" && (
-                  <Link href="/adminPanel" className="px-4 py-1 rounded hover:bg-blue-800 transition text-blue-300 font-semibold border border-blue-400 ml-2">Адмін-панель</Link>
+                  <Link
+                    href="/adminPanel"
+                    className="px-4 py-1 rounded hover:bg-blue-800 transition text-blue-300 font-semibold border border-blue-400 ml-2"
+                  >
+                    Адмін-панель
+                  </Link>
                 )}
               </div>
             </>
@@ -49,19 +68,21 @@ export default function Header() {
         >
           Вийти
         </button>
-         <div className="flex items-center gap-3 pl-2">
-                  <span className="font-semibold text-blue-100 whitespace-nowrap">{user?.name}</span>
-                  <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
-                    <Image
-                      src={user?.avatar || "/default-avatar.png"}
-                      alt="User Avatar"
-                      width={48}
-                      height={48}
-                      className="rounded-full object-cover w-12 h-12"
-                      priority
-                    />
-                  </div>
-                </div>
+        <div className="flex items-center gap-3 pl-2">
+          <span className="font-semibold text-blue-100 whitespace-nowrap">
+            {user?.name}
+          </span>
+          <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
+            <Image
+              src={user?.avatar || "/default-avatar.png"}
+              alt="User Avatar"
+              width={48}
+              height={48}
+              className="rounded-full object-cover w-12 h-12"
+              priority
+            />
+          </div>
+        </div>
       </nav>
     </header>
   );

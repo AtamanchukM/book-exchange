@@ -5,28 +5,35 @@ import {
 } from "firebase/auth";
 import { auth, db } from "@/modules/auth/lib/firebase/firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
-
 export async function registerService(
   name: string,
   email: string,
   password: string
 ) {
-  const res = await createUserWithEmailAndPassword(auth, email, password);
-  const token = await res.user.getIdToken();
-  await setDoc(doc(db, "users", res.user.uid), {
-    uid: res.user.uid,
-    name,
-    email,
-    role: "user",
-    createdAt: new Date().toISOString(),
-  });
-  return {
-    uid: res.user.uid,
-    email: res.user.email!,
-    name,
-    role: "user",
-    token,
-  };
+  try {
+    const res = await createUserWithEmailAndPassword(auth, email, password);
+    const token = await res.user.getIdToken(true);
+    await setDoc(doc(db, "users", res.user.uid), {
+      uid: res.user.uid,
+      name,
+      email,
+      role: "user",
+      createdAt: new Date().toISOString(),
+    });
+    return {
+      user: {
+        uid: res.user.uid,
+        email: res.user.email!,
+        name,
+        role: "user",
+        token,
+        avatar: "",
+      },
+      error: null,
+    };
+  } catch (error: any) {
+    return { user: null, error: error.message };
+  }
 }
 
 export async function loginService(email: string, password: string) {
@@ -37,7 +44,6 @@ export async function loginService(email: string, password: string) {
     const role = userDoc.exists() ? userDoc.data().role : "user";
     const name = userDoc.exists() ? userDoc.data().name : "";
     const avatar = userDoc.exists() ? userDoc.data().avatar : "";
-    console.log("avatar:", avatar);
     return {
       user: {
         uid: res.user.uid,
@@ -45,8 +51,8 @@ export async function loginService(email: string, password: string) {
         name,
         role,
         token,
-        avatar
-      }
+        avatar,
+      },
     };
   } catch (error: any) {
     return { error: error.message };
