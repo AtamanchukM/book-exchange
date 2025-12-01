@@ -13,7 +13,7 @@ export default function BookPage() {
   if (!book) return <div>Книгу не знайдено</div>;
 
   return (
-    <Container>
+    <Container className="w-fit">
       <BookItem
         book={book}
         renderActions={() => <ExchangeButton book={book} />}

@@ -29,9 +29,9 @@ export default function AddBookForm() {
         >
           {({ isSubmitting }) => (
             <Form className="flex flex-col gap-5">
-              <h2 className="text-2xl font-bold text-white mb-2 text-center">Додати книгу</h2>
+              <h2 className="text-2xl font-bold text-white mb-1 ">Додати книгу</h2>
               <div className="flex flex-col gap-1">
-                <label htmlFor="name" className="text-white font-medium">Назва книги</label>
+                <label htmlFor="name" className="text-white font-medium ">Назва книги</label>
                 <Field
                   type="text"
                   name="name"

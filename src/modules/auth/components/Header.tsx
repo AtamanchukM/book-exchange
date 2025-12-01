@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSearchStore } from "@/modules/auth/stores/useSearchStore";
 import Image from "next/image";
+import ProtectedRoute from "../middlware/ProtectedRoute";
+import defautlAvatar from "../images/default-avatar.png";
 
 export default function Header() {
   const user = useAuthStore((state) => state.user);
@@ -13,10 +15,10 @@ export default function Header() {
   const setQuery = useSearchStore((s) => s.setQuery);
 
   return (
+    <ProtectedRoute>
     <header className="w-full bg-gray-900 p-4 sticky top-0 z-30 shadow-md">
       <nav className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
-          {user && (
             <>
               <div className="flex items-center gap-4 w-full sm:w-auto">
                 <input
@@ -57,7 +59,6 @@ export default function Header() {
                 )}
               </div>
             </>
-          )}
         </div>
         <button
           onClick={() => {
@@ -74,7 +75,7 @@ export default function Header() {
           </span>
           <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
             <Image
-              src={user?.avatar || "/default-avatar.png"}
+              src={user?.avatar || defautlAvatar}
               alt="User Avatar"
               width={48}
               height={48}
@@ -85,5 +86,6 @@ export default function Header() {
         </div>
       </nav>
     </header>
+    </ProtectedRoute>
   );
 }

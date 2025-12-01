@@ -4,13 +4,13 @@ import { getAuth } from "firebase/auth";
 import { getFirestore, collection, addDoc, doc, setDoc, updateDoc } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDl7KYqO-s0l1VlWVZTZ-YK1zbokYRElgw",
-  authDomain: "book-exchange-59942.firebaseapp.com",
-  projectId: "book-exchange-59942",
-  storageBucket: "book-exchange-59942.firebasestorage.app",
-  messagingSenderId: "660800488130",
-  appId: "1:660800488130:web:631df150f554f6df6bf15b",
-  measurementId: "G-6JWCFXJZMX"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN!,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID!,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET!,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID!,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID!,
 };
 
 // Initialize Firebase

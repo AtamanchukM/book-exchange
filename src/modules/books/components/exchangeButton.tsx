@@ -1,12 +1,14 @@
 import { sendBookExchangeEmail, useBookExchange } from "@/modules/books";
 import { createExchangeRequest } from "@/modules/books";
+import { off } from "process";
 
 interface ExchangeButtonProps {
-  book: { name: string };
+  book: { name: string, ownerId: string};
 }
 
 export default function ExchangeButton({ book }: ExchangeButtonProps) {
   const { user, userBooks, toEmail } = useBookExchange(book);
+  console.log("ExchangeButton props:", { book, user, userBooks, toEmail });
   const handleExchange = async () => {
     if (user && book && user.uid === book.ownerId) {
       alert("Ви не можете надсилати запит на обмін на власну книгу.");
