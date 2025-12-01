@@ -1,5 +1,5 @@
 import { useAuthStore } from "@/modules/auth/stores/useAuthStore";
-import { useBooks } from "@/modules/books/hooks/useBooks";
+import { useBooks } from "@/modules/books";
 import { useMemo } from "react";
 
 export function useBookExchange(book: any) {

@@ -1,11 +1,12 @@
 import { getAuth, verifyBeforeUpdateEmail } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/modules/auth/lib/firebase/firebase";
-import { useAuthStore } from "@/modules/auth/stores/useAuthStore";
+import { useAuthStore } from "@/modules/auth";
+import type { ProfileFormValues } from "@/modules/auth/types/auth.types";
 
 export const changeProfile = async (
   userId: string,
-  values: { name: string; email: string; avatar: string },
+  values: ProfileFormValues,
   setSubmitting: (v: boolean) => void
 ) => {
   const auth = getAuth();

@@ -1,8 +1,7 @@
 "use client";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/modules/auth/stores/useAuthStore";
-import { restoreSchema } from "@/modules/auth/lib/schema/authSchema";
+import { useAuthStore, restoreSchema } from "@/modules/auth";
 import Link from "next/link";
 
 export default function ForgotPasswordForm() {

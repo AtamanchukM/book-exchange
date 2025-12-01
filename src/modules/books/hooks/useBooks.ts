@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { fetchBooks } from "@/modules/books/services/fetchBooks";
-import type { BookData } from "@/modules/books/types/book.types";
+import { fetchBooks } from "@/modules/books";
+import type { BookData } from "@/modules/books";
 import { create } from "zustand";
 
 export const useBooksStore = create<{

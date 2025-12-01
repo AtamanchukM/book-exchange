@@ -1,8 +1,7 @@
 "use client";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/modules/auth/stores/useAuthStore";
-import { loginSchema } from "@/modules/auth/lib/schema/authSchema";
+import { useAuthStore, loginSchema } from "@/modules/auth";
 import Link from "next/link";
 
 export default function LoginForm() {

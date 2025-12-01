@@ -1,3 +1,10 @@
+export interface ExchangeRequest {
+  id: string;
+  userId: string; // кому адресовано
+  message: string;
+  status: "pending" | "accepted" | "rejected";
+  createdAt: string;
+}
 export interface BookData {
   id: string;
   name: string ;

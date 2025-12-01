@@ -1,9 +1,9 @@
 "use client";
-import { useAuthStore } from "@/modules/auth/stores/useAuthStore";
-
+import { useAuthStore } from "@/modules/auth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSearchStore } from "@/modules/auth/stores/useSearchStore";
+import Image from "next/image";
 
 export default function Header() {
   const user = useAuthStore((state) => state.user);
@@ -29,6 +29,13 @@ export default function Header() {
             <span className="mr-4">
               Привіт, {user?.name} {user?.role}
             </span>
+            <Image
+              src={user?.avatar || "/default-avatar.png"}
+              alt="User Avatar"
+              width={50}
+              height={50}
+              className="rounded-full object-cover"
+            />
             <Link href="/books">All books</Link>
             <Link href="/me/books">My books</Link>
             <Link href="/profile">Profile</Link>

@@ -5,31 +5,9 @@ import {
   loginService,
   restoreService,
   logoutService,
-} from "@/modules/auth/services/authService";
+} from "@/modules/auth";
 
-interface AuthUser {
-  uid: string;
-  name?: string;
-  email: string;
-  restoreEmail?: string;
-  role?: string;
-  token?: string;
-  avatar?: string;
-}
-
-interface AuthState {
-  user: AuthUser | null;
-  loading: boolean;
-  error: string | null;
-  success?: string | null;
-  register: (name: string, email: string, password: string) => Promise<void>;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
-  restore: (email: string) => Promise<void>;
-  setLoading: (loading: boolean) => void;
-  setError: (error: string | null) => void;
-  resetAuth: () => void;
-}
+import type { AuthState } from "@/modules/auth/types/auth.types";
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -49,7 +27,7 @@ export const useAuthStore = create<AuthState>()(
       login: async (email, password) => {
         set({ loading: true, error: null });
         const { user, error } = await loginService(email, password);
-        if (user) set({ user, loading: false});
+        if (user) set({ user, loading: false });
         if (error) set({ error, loading: false });
       },
 

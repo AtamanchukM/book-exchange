@@ -1,15 +1,15 @@
 import { Formik, Form, Field } from "formik";
-import { changeProfile } from "@/modules/auth/services/changeProfile";
-import { useAuthStore } from "@/modules/auth/stores/useAuthStore";
+import { changeProfile, useAuthStore } from "@/modules/auth";
+import type { ProfileFormValues } from "@/modules/auth/types/auth.types";
 export default function ProfileForm() {
   const user = useAuthStore((s) => s.user);
   const userId = user?.uid;
   return (
-    <Formik
+    <Formik<ProfileFormValues>
       initialValues={{
         name: user?.name || "",
         email: user?.email || "",
-        avatar: "",
+        avatar: user?.avatar || "",
       }}
       onSubmit={(values, { setSubmitting }) => {
         if (!userId) return;
@@ -19,19 +19,25 @@ export default function ProfileForm() {
       <Form className="flex flex-col gap-4 mb-6">
         <label>
           Ім'я:
-          <Field name="name" className="text-black px-2 py-1 rounded ml-2" />
+          <Field
+            name="name"
+            className="text-black px-2 rounded ml-2 border border-blue-200 py-2 "
+          />
         </label>
         <label>
           Email:
           <Field
             name="email"
             type="email"
-            className="text-black px-2 py-1 rounded ml-2"
+            className="text-black px-2 rounded ml-2 border border-blue-200 py-2 "
           />
         </label>
         <label>
           Аватар (URL):
-          <Field name="avatar" className="text-black px-2 py-1 rounded ml-2" />
+          <Field
+            name="avatar"
+            className="text-black px-2 rounded ml-2 border border-blue-200 py-2 "
+          />
         </label>
         <button
           type="submit"
