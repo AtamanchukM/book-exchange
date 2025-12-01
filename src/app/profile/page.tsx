@@ -1,14 +1,23 @@
-'use client';
-// import { getExchangeRequestsForUser } from "@/services/exchangeService"; // створіть цю функцію для реальних запитів
-import { useAuthStore } from "@/stores/useAuthStore";
-import { useUserBooks } from "@/hooks/useUserBooks";
+"use client";
+
+import { useAuthStore } from "@/modules/auth/stores/useAuthStore";
 import { useEffect, useState } from "react";
-import { Formik, Form, Field } from "formik";
+import { fetchUserBooks } from "@/modules/books/services/fetchUserBooks";
+import Image from "next/image";
+import ProfileForm from "@/modules/profile/components/ProfileForm";
 
 export default function ProfilePage() {
   const user = useAuthStore((s) => s.user);
-  const { books } = useUserBooks(user?.uid);
+  const userId = user?.uid;
   const [requests, setRequests] = useState<any[]>([]);
+  const [books, setBooks] = useState([]);
+  
+  useEffect(() => {
+    if (!userId) return;
+    fetchUserBooks(userId).then((res) => {
+      setBooks(res.books);
+    });
+  }, [userId]);
 
   // Заглушка для запитів на обмін
   useEffect(() => {
@@ -22,30 +31,18 @@ export default function ProfilePage() {
   return (
     <div className="max-w-xl mx-auto mt-8 p-4 bg-gray-800 rounded text-white">
       <h1 className="text-2xl mb-4">Профіль</h1>
-      <Formik
-        initialValues={{ name: user?.name || "", email: user?.email || "", avatar: "" }}
-        onSubmit={async (values) => {
-          // TODO: update profile in Firestore/Auth
-          alert("Профіль оновлено (заглушка)");
-        }}
-      >
-        <Form className="flex flex-col gap-4 mb-6">
-          <label>
-            Ім'я:
-            <Field name="name" className="text-black px-2 py-1 rounded ml-2" />
-          </label>
-          <label>
-            Email:
-            <Field name="email" type="email" className="text-black px-2 py-1 rounded ml-2" />
-          </label>
-          <label>
-            Аватар (URL):
-            <Field name="avatar" className="text-black px-2 py-1 rounded ml-2" />
-          </label>
-          <button type="submit" className="bg-blue-500 hover:bg-blue-700 px-4 py-2 rounded text-white">Зберегти</button>
-        </Form>
-      </Formik>
-      <div className="mb-4">Кількість книг: <b>{books.length}</b></div>
+      <Image
+        src={user?.avatar || "/default-avatar.png"}
+        alt="Аватар користувача"
+        width={100}
+        height={100}
+        className="rounded-full mb-4"
+      />
+      <ProfileForm />
+     
+      <div className="mb-4">
+        Кількість книг: <b>{books.length}</b>
+      </div>
       <div>
         <h2 className="text-xl mb-2">Запити на обмін</h2>
         <ul className="list-disc ml-6">

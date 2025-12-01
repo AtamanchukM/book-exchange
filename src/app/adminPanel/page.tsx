@@ -1,13 +1,13 @@
 "use client";
-import ProtectedAdmin from "@/route/ProtectedAdmin";
-import BookList from "@/components/books/BookList";
-import Container from "@/components/common/Container";
-import { useBooks } from "@/hooks/useBooks";
-import Details from "@/components/books/Details";
-import DeleteBook from "@/components/books/DeleteBook";
-import { useSearchStore, filteredBooks } from "@/stores/useSearchStore";
+import ProtectedAdmin from "@/modules/auth/middlware/ProtectedAdmin";
+import BookList from "@/modules/books/components/BookList";
+import Container from "@/modules/common/Container";
+import { useBooks } from "@/modules/books/hooks/useBooks";
+import Details from "@/modules/books/components/Details";
+import DeleteBook from "@/modules/books/components/DeleteBook";
+import { useSearchStore, filteredBooks } from "@/modules/auth/stores/useSearchStore";
 import { useEffect, useState } from "react";
-import { fetchAllUsers } from "@/services/users/fetchAllUsers";
+import { fetchAllUsers } from "@/modules/auth/services/fetchAllUsers";
 
 export default function AdminPanel() {
   const [users, setUsers] = useState([]);

@@ -1,0 +1,14 @@
+import { create } from "zustand";
+
+type SearchState = {
+  query: string;
+  setQuery: (query: string) => void;
+};
+
+
+export { filteredBooks } from "@/modules/books/utils/toLowerCase";
+
+export const useSearchStore = create<SearchState>((set) => ({
+  query: "",
+  setQuery: (query) => set({ query: query }),
+}));

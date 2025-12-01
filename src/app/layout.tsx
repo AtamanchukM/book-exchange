@@ -1,5 +1,5 @@
 import "@/styles/globals.css";
-import Header from "@/components/layout/Header";
+import Header from "@/modules/auth/components/Header";
 export default function RootLayout({
   children,
 }: Readonly<{

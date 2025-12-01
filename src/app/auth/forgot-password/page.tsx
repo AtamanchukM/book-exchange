@@ -1,15 +1,6 @@
-"use client";
-
-import { restoreSchema } from "@/lib/schema/authSchema";
-import AuthForm from "@/components/forms/AuthForm";
-export default function ForgotPassword() {
+import ForgotPasswordForm from "@/modules/auth/components/ForgotPasswordForm";
+export default function ForgotPasswordPage() {
   return (
-    <AuthForm
-      title="Відновлення пароля"
-      initialValues={{ emailRestore: "" }}
-      validationSchema={restoreSchema}
-      method="restore"
-      buttonText="Відновити пароль"
-    />
+  <ForgotPasswordForm />
   );
 }

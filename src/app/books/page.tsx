@@ -1,10 +1,10 @@
 "use client";
-import ProtectedRoute from "@/route/ProtectedRoute";
-import Container from "@/components/common/Container";
-import BookList from "@/components/books/BookList";
-import { useBooks } from "@/hooks/useBooks";
-import Details from "@/components/books/Details";
-import { useSearchStore, filteredBooks } from "@/stores/useSearchStore";
+import ProtectedRoute from "@/modules/auth/middlware/ProtectedRoute";
+import Container from "@/modules/common/Container";
+import BookList from "@/modules/books/components/BookList";
+import { useBooks } from "@/modules/books/hooks/useBooks";
+import Details from "@/modules/books/components/Details";
+import { useSearchStore, filteredBooks } from "@/modules/auth/stores/useSearchStore";
 
 export default function Books() {
   const { Allbooks, loading, hasMore, loadMore } = useBooks();
