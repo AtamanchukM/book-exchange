@@ -9,7 +9,7 @@ export default function AddBookForm() {
 
   return (
     <Container>
-      <div className="flex flex-col w-fit m-auto gap-2 mt-8">
+      <div className="flex flex-col w-full max-w-md m-auto gap-4 mt-10 bg-gray-800 p-8 rounded-lg shadow-lg">
         <Formik
           initialValues={{ name: "", author: "", photoUrl: "" }}
           validationSchema={addBookSchema}
@@ -28,54 +28,67 @@ export default function AddBookForm() {
           }}
         >
           {({ isSubmitting }) => (
-            <Form className="flex flex-col w-fit m-auto gap-2 mt-8">
-              <div className="flex">
+            <Form className="flex flex-col gap-5">
+              <h2 className="text-2xl font-bold text-white mb-2 text-center">Додати книгу</h2>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="name" className="text-white font-medium">Назва книги</label>
                 <Field
                   type="text"
                   name="name"
-                  className="border"
+                  id="name"
+                  className="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-900 text-white"
                   placeholder="Book Name"
                 />
-                <ErrorMessage
-                  name="name"
-                  component="div"
-                  className="text-red-500"
-                />
+                <div className="min-h-[20px]">
+                  <ErrorMessage
+                    name="name"
+                    component="div"
+                    className="text-red-400 text-sm"
+                  />
+                </div>
               </div>
 
-              <div className="flex">
+              <div className="flex flex-col gap-1">
+                <label htmlFor="author" className="text-white font-medium">Автор</label>
                 <Field
                   type="text"
                   name="author"
-                  className="border"
+                  id="author"
+                  className="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-900 text-white"
                   placeholder="Author"
                 />
-                <ErrorMessage
-                  name="author"
-                  component="div"
-                  className="text-red-500"
-                />
+                <div className="min-h-[20px]">
+                  <ErrorMessage
+                    name="author"
+                    component="div"
+                    className="text-red-400 text-sm"
+                  />
+                </div>
               </div>
 
-              <div className="flex">
+              <div className="flex flex-col gap-1">
+                <label htmlFor="photoUrl" className="text-white font-medium">Фото (URL)</label>
                 <Field
                   type="text"
                   name="photoUrl"
-                  className="border"
+                  id="photoUrl"
+                  className="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-900 text-white"
                   placeholder="Photo URL"
                 />
-                <ErrorMessage
-                  name="photoUrl"
-                  component="div"
-                  className="text-red-500"
-                />
+                <div className="min-h-[20px]">
+                  <ErrorMessage
+                    name="photoUrl"
+                    component="div"
+                    className="text-red-400 text-sm"
+                  />
+                </div>
               </div>
               <button
                 type="submit"
-                className="bg-blue-500 hover:bg-blue-700 transition-all text-white px-4 py-2 rounded"
+                className="bg-blue-500 hover:bg-blue-700 transition-all text-white px-4 py-2 rounded font-semibold mt-2"
                 disabled={isSubmitting}
               >
-                Add Book
+                Додати книгу
               </button>
             </Form>
           )}

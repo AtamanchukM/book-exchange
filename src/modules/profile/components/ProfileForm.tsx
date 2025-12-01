@@ -16,32 +16,35 @@ export default function ProfileForm() {
         changeProfile(userId, values, setSubmitting);
       }}
     >
-      <Form className="flex flex-col gap-4 mb-6">
-        <label>
+      <Form className="flex flex-col gap-5 mb-6">
+        <label className="flex flex-col gap-1 text-blue-100 font-medium">
           Ім'я:
           <Field
             name="name"
-            className="text-black px-2 rounded ml-2 border border-blue-200 py-2 "
+            className="bg-gray-900 text-blue-100 px-3 py-2 rounded border border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition placeholder:text-gray-400"
+            placeholder="Ваше ім'я"
           />
         </label>
-        <label>
+        <label className="flex flex-col gap-1 text-blue-100 font-medium">
           Email:
           <Field
             name="email"
             type="email"
-            className="text-black px-2 rounded ml-2 border border-blue-200 py-2 "
+            className="bg-gray-900 text-blue-100 px-3 py-2 rounded border border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition placeholder:text-gray-400"
+            placeholder="Email"
           />
         </label>
-        <label>
+        <label className="flex flex-col gap-1 text-blue-100 font-medium">
           Аватар (URL):
           <Field
             name="avatar"
-            className="text-black px-2 rounded ml-2 border border-blue-200 py-2 "
+            className="bg-gray-900 text-blue-100 px-3 py-2 rounded border border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition placeholder:text-gray-400"
+            placeholder="Посилання на аватар"
           />
         </label>
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-700 px-4 py-2 rounded text-white"
+          className="bg-blue-700 hover:bg-blue-800 text-blue-100 font-bold px-6 py-2 rounded-lg shadow transition focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           Зберегти
         </button>

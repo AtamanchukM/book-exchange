@@ -18,23 +18,23 @@ export default function BookList({
   loadMore,
 }: BookListProps) {
   return (
-    <div className=" shadow-xl m-auto p-6  rounded-lg ">
-      <ul className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-wrap justify-center bg-gray-700 p-4">
+    <div className="bg-gray-900 shadow-2xl m-auto p-8 rounded-2xl max-w-7xl">
+      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {books.map((book) => (
-          <BookItem key={book.id} book={book} renderActions={renderActions} />
+            <BookItem key={book.id} book={book}  renderActions={renderActions} />
         ))}
       </ul>
       {loading && (
-        <p className="text-white text-center mt-4">Завантаження...</p>
+        <p className="text-white text-center mt-6 text-lg">Завантаження...</p>
       )}
       {books.length === 0 && !loading && (
-        <p className="text-white text-center mt-4">Книги не знайдено</p>
+        <p className="text-white text-center mt-6 text-lg">Книги не знайдено</p>
       )}
       {hasMore && loadMore && (
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center mt-8">
           <button
             onClick={loadMore}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-md transition-all"
             disabled={loading}
           >
             Показати більше
