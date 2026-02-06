@@ -5,12 +5,16 @@ import Container from "@/modules/common/Container";
 import { useBooks } from "@/modules/books/hooks/useBooks";
 import Details from "@/modules/books/components/Details";
 import DeleteBook from "@/modules/books/components/DeleteBook";
-import { useSearchStore, filteredBooks } from "@/modules/auth/stores/useSearchStore";
+import {
+  useSearchStore,
+  filteredBooks,
+} from "@/modules/auth/stores/useSearchStore";
 import { useEffect, useState } from "react";
 import { fetchAllUsers } from "@/modules/auth/services/fetchAllUsers";
+import { DocumentData } from "firebase/firestore";
 
 export default function AdminPanel() {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<DocumentData[]>([]);
   const { Allbooks, loading, hasMore, loadMore } = useBooks();
   const query = useSearchStore((s) => s.query);
 

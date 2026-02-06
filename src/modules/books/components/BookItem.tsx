@@ -1,6 +1,10 @@
 import Image from "next/image";
+import Link from "next/link";
 import placeholder from "../images/placeholder.png";
 import { BookData } from "../types/book.types";
+import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
+import { useState } from "react";
+
 export default function BookItem({
   book,
   renderActions,
@@ -8,31 +12,58 @@ export default function BookItem({
   book: BookData;
   renderActions?: (book: BookData) => React.ReactNode;
 }) {
+  const [isFavorite, setIsFavorite] = useState(false);
+
   return (
-    <li className="flex flex-col sm:flex-row w-full h-full gap-4 p-4 rounded-xl bg-blue-900/10 shadow-lg shadow-blue-900/20 transition-transform hover:scale-[1.02]">
-      <div className=" flex items-center justify-center bg-gray-800 rounded-lg overflow-hidden w-[120px] h-[170px] sm:w-[140px] sm:h-[200px]">
-        <Image
-          src={book.photoUrl || placeholder}
-          alt={book.name}
-          width={120}
-          height={170}
-          className="object-cover w-full h-full"
-        />
-      </div>
-      <div className="flex flex-col justify-between ">
-        <div className="flex flex-col gap-2 mb-2">
-          <h2 className="text-xl font-bold text-white leading-tight truncate">
+    <li className="flex flex-col w-full overflow-hidden transition-transform rounded-2xl bg-white shadow-lg hover:shadow-xl hover:scale-[1.01] max-w-[220px]">
+      <Link href={`/books/${book.id}`} className="flex flex-col grow">
+        {/* Обкладинка */}
+        <div className="relative w-full  overflow-hidden bg-gray-300">
+          <Image
+            src={book.photoUrl || placeholder}
+            alt={book.name}
+            width={250}
+            height={350}
+            className="object-cover w-full h-full hover:scale-[1.05] transition-transform duration-300"
+          />
+          {/* Серце */}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setIsFavorite(!isFavorite);
+            }}
+            className="absolute p-2 transition bg-white rounded-full shadow-md top-3 right-3 hover:bg-gray-100"
+          >
+            {isFavorite ? (
+              <MdFavorite size={24} className="text-red-500" />
+            ) : (
+              <MdFavoriteBorder size={24} className="text-gray-400" />
+            )}
+          </button>
+          <span className="absolute bottom-2 left-2 px-3 py-1 text-xs font-semibold text-gray-900 bg-white rounded-full">
+            {book.category || "Книга"}
+          </span>
+        </div>
+
+        {/* Информація */}
+        <div className="flex flex-col gap-3 p-4">
+          {/* Категорія */}
+
+          {/* Назва */}
+          <h2 className="text-lg font-bold text-gray-900 line-clamp-2">
             {book.name}
           </h2>
-          <p className="text-gray-300 text-sm">
-            Автор: <span className="font-medium text-white">{book.author}</span>
-          </p>
-          <p className="text-gray-400 text-xs">
-            Власник: <span className="text-white">{book.ownerName}</span>
-          </p>
+
+          {/* Автор */}
+          <p className="text-sm text-gray-600">{book.author}</p>
+
+          {/* Місто та користувач */}
+          <div className="flex items-center gap-2 text-xs text-gray-500">
+            <span>📍 {book.city || "Місто"}</span>
+            <span>@{book.ownerName || "user"}</span>
+          </div>
         </div>
-        <div className="mt-2">{renderActions && renderActions(book)}</div>
-      </div>
+      </Link>
     </li>
   );
 }

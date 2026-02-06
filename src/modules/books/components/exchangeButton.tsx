@@ -3,7 +3,7 @@ import { createExchangeRequest } from "@/modules/books";
 import { off } from "process";
 
 interface ExchangeButtonProps {
-  book: { name: string, ownerId: string};
+  book: { name: string; ownerId: string };
 }
 
 export default function ExchangeButton({ book }: ExchangeButtonProps) {
@@ -12,6 +12,10 @@ export default function ExchangeButton({ book }: ExchangeButtonProps) {
   const handleExchange = async () => {
     if (user && book && user.uid === book.ownerId) {
       alert("Ви не можете надсилати запит на обмін на власну книгу.");
+      return;
+    }
+    if (!user) {
+      alert("Будь ласка, увійдіть в акаунт");
       return;
     }
     try {
@@ -25,7 +29,7 @@ export default function ExchangeButton({ book }: ExchangeButtonProps) {
       if (user && book && toEmail) {
         await createExchangeRequest({
           userId: book.ownerId,
-          message: `Користувач ${user.name || user.email} хоче обміняти книгу "${book.name}". Його книги для обміну: ${userBooks.map(b => b.name).join(", ")}`,
+          message: `Користувач ${user.name || user.email} хоче обміняти книгу "${book.name}". Його книги для обміну: ${userBooks.map((b) => b.name).join(", ")}`,
         });
       }
       alert("Запит на обмін відправлено!");
