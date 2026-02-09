@@ -5,20 +5,14 @@ import { BookData } from "../types/book.types";
 import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
 import { useState } from "react";
 
-export default function BookItem({
-  book,
-  renderActions,
-}: {
-  book: BookData;
-  renderActions?: (book: BookData) => React.ReactNode;
-}) {
+export default function BookItem({ book }: { book: BookData }) {
   const [isFavorite, setIsFavorite] = useState(false);
 
   return (
-    <li className="flex flex-col w-full overflow-hidden transition-transform rounded-2xl bg-white shadow-lg hover:shadow-xl hover:scale-[1.01] max-w-[220px]">
+    <div className="flex flex-col w-full h-full overflow-hidden transition-transform bg-white shadow-lg rounded-2xl hover:shadow-xl hover:-translate-y-1 ">
       <Link href={`/books/${book.id}`} className="flex flex-col grow">
         {/* Обкладинка */}
-        <div className="relative w-full  overflow-hidden bg-gray-300">
+        <div className="relative w-full overflow-hidden bg-gray-300">
           <Image
             src={book.photoUrl || placeholder}
             alt={book.name}
@@ -40,7 +34,7 @@ export default function BookItem({
               <MdFavoriteBorder size={24} className="text-gray-400" />
             )}
           </button>
-          <span className="absolute bottom-2 left-2 px-3 py-1 text-xs font-semibold text-gray-900 bg-white rounded-full">
+          <span className="absolute px-3 py-1 text-xs font-semibold text-gray-900 bg-white rounded-full bottom-2 left-2">
             {book.category || "Книга"}
           </span>
         </div>
@@ -64,6 +58,6 @@ export default function BookItem({
           </div>
         </div>
       </Link>
-    </li>
+    </div>
   );
 }

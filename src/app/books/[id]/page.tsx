@@ -14,10 +14,7 @@ export default function BookPage() {
 
   return (
     <Container className="w-fit">
-      <BookItem
-        book={book}
-        renderActions={() => <ExchangeButton book={book} />}
-      />
+      <BookItem book={book} />
     </Container>
   );
 }

@@ -45,15 +45,18 @@ export default function Header() {
     <ProtectedRoute>
       <header
         ref={headerRef}
-        className="fixed w-full shadow-md h-[70px]  z-50  bg-amber-50"
+        className="fixed w-full shadow-md h-[70px]  z-50  bg-amber-50/95"
       >
         {/* Desktop */}
         <nav className="items-center justify-between hidden w-full gap-8 px-4 py-4 mx-auto md:flex max-w-7xl">
           <div className="flex items-center flex-1 w-full gap-8">
-            <div className="flex items-center gap-2 text-2xl text-stone-900">
-              <IoBookOutline size={28} className="text-amber-700" />
-              BookSwap
-            </div>
+            <Link
+              href="/"
+              className="flex items-center gap-2 text-2xl text-stone-900"
+            >
+              <IoBookOutline size={36} className="text-amber-700" />
+              <span>BookSwap</span>
+            </Link>
             <input
               type="text"
               placeholder="Пошук книг, авторів..."
@@ -110,10 +113,13 @@ export default function Header() {
 
         {/* Mobile */}
         <div className="flex items-center justify-between h-full px-4 py-4 md:hidden">
-          <div className="flex items-center gap-2 text-xl text-stone-900">
+          <Link
+            href="/"
+            className="flex items-center gap-2 text-xl text-stone-900"
+          >
             <IoBookOutline size={24} className="text-amber-700" />
             BookSwap
-          </div>
+          </Link>
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="text-stone-900"
