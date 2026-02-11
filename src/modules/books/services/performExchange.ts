@@ -22,7 +22,7 @@ export async function performBookExchange(
       ownerId: owner2Id,
       ownerName: owner2Name,
     });
-
+    // TEXT iN REWRITE
     console.log(`Book ${bookId1} exchanged successfully`);
   } catch (error) {
     console.error("Error performing exchange:", error);
