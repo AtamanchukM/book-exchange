@@ -1,6 +1,12 @@
 export interface ExchangeRequest {
   id: string;
   userId: string; // кому адресовано
+  senderId?: string; // від кого
+  senderName?: string;
+  senderEmail?: string;
+  bookId?: string; // яку книгу запитують
+  bookName?: string;
+  offeredBooks?: string; // що пропонують
   message: string;
   status: "pending" | "accepted" | "rejected";
   createdAt: string;

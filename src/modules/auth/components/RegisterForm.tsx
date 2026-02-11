@@ -1,4 +1,3 @@
-
 "use client";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useRouter } from "next/navigation";
@@ -75,10 +74,7 @@ export default function RegisterForm() {
             </button>
             <div className="text-sm mt-2 flex justify-center gap-2">
               Вже є акаунт?
-              <Link
-                href="/auth/login"
-                className="text-blue-500 hover:underline"
-              >
+              <Link href="/login" className="text-blue-500 hover:underline">
                 Увійти
               </Link>
             </div>

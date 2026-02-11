@@ -14,7 +14,7 @@ import type { ProfileFormValues } from "@/modules/auth/types/auth.types";
 export const changeProfile = async (
   userId: string,
   values: ProfileFormValues,
-  setSubmitting: (v: boolean) => void,
+  setSubmitting: (v: boolean) => void
 ): Promise<boolean> => {
   const auth = getAuth();
   const currentUser = auth.currentUser;
@@ -23,7 +23,7 @@ export const changeProfile = async (
     if (currentUser && values.email && values.email !== currentUser.email) {
       await verifyBeforeUpdateEmail(currentUser, values.email);
       alert(
-        "На нову адресу надіслано лист для підтвердження. Підтвердіть email, щоб завершити зміну.",
+        "На нову адресу надіслано лист для підтвердження. Підтвердіть email, щоб завершити зміну."
       );
       setSubmitting(false);
       return false;
@@ -41,7 +41,7 @@ export const changeProfile = async (
     const updateBookPromises: Promise<unknown>[] = [];
     booksSnap.forEach((docSnap) => {
       updateBookPromises.push(
-        updateDoc(doc(db, "books", docSnap.id), { ownerName: values.name }),
+        updateDoc(doc(db, "books", docSnap.id), { ownerName: values.name })
       );
     });
     await Promise.all(updateBookPromises);
@@ -59,12 +59,7 @@ export const changeProfile = async (
     alert("Профіль і книги успішно оновлено!");
     return true;
   } catch (e: unknown) {
-    if (
-      typeof e === "object" &&
-      e !== null &&
-      "code" in e &&
-      (e as { code?: string }).code === "auth/requires-recent-login"
-    ) {
+    if (typeof e === "object" && e !== null && "code" in e && (e as { code?: string }).code === "auth/requires-recent-login") {
       alert("Для зміни email потрібно повторно увійти в акаунт.");
     } else {
       const message =

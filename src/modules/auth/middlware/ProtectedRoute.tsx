@@ -19,7 +19,7 @@ export default function ProtectedRoute({
 
   useEffect(() => {
     if (mounted && !user) {
-      router.push("/auth/login");
+      router.push("/login");
       useAuthStore.getState().logout();
     }
   }, [mounted, user, router]);

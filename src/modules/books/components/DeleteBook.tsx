@@ -2,9 +2,9 @@ import { deleteBook } from "@/modules/books/services/deleteBook";
 export default function DeleteBook({ id }: { id: string }) {
   return (
     <button
-      className="bg-red-500 hover:bg-red-700 transition-all py-2 px-4 rounded"
+      className="w-full px-4 py-2 text-white transition-colors duration-300 rounded bg-amber-400 hover:bg-amber-500"
       onClick={() => {
-        deleteBook(id)
+        deleteBook(id);
         console.log(`Book with id ${id} deleted`);
       }}
     >

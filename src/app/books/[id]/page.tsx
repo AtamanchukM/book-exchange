@@ -14,7 +14,7 @@ export default function BookPage() {
 
   return (
     <Container className="w-fit">
-      <BookItem book={book} />
+      <BookItem book={book} renderedActions={<ExchangeButton book={book} />} />
     </Container>
   );
 }

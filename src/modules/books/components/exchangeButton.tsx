@@ -1,9 +1,8 @@
 import { sendBookExchangeEmail, useBookExchange } from "@/modules/books";
 import { createExchangeRequest } from "@/modules/books";
-import { off } from "process";
 
 interface ExchangeButtonProps {
-  book: { name: string; ownerId: string };
+  book: { id: string; name: string; ownerId: string };
 }
 
 export default function ExchangeButton({ book }: ExchangeButtonProps) {
@@ -25,22 +24,28 @@ export default function ExchangeButton({ book }: ExchangeButtonProps) {
         toEmail,
         offeredBooks: userBooks,
       });
-      // Додаємо запит у Firestore для власника книги
       if (user && book && toEmail) {
         await createExchangeRequest({
           userId: book.ownerId,
+          senderId: user.uid,
+          senderName: user.name || "Невідомий користувач",
+          senderEmail: user.email,
+          bookId: book.id,
+          bookName: book.name,
+          offeredBooks: userBooks.map((b) => b.name).join(", "),
           message: `Користувач ${user.name || user.email} хоче обміняти книгу "${book.name}". Його книги для обміну: ${userBooks.map((b) => b.name).join(", ")}`,
         });
       }
       alert("Запит на обмін відправлено!");
-    } catch {
+    } catch (error) {
+      console.error("Exchange error:", error);
       alert("Сталася помилка при відправці запиту на обмін");
     }
   };
   return (
     <button
       onClick={handleExchange}
-      className="bg-blue-400 hover:bg-blue-600 py-2 px-4 rounded"
+      className="w-full px-4 py-2 text-white transition-colors duration-300 rounded bg-amber-400 hover:bg-amber-500"
     >
       Exchange
     </button>

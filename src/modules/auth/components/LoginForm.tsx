@@ -63,7 +63,7 @@ export default function LoginForm() {
               <div className="flex justify-center gap-2">
                 Забули пароль?
                 <Link
-                  href="/auth/forgot-password"
+                  href="/forgot-password"
                   className="text-blue-500 hover:underline"
                 >
                   Відновити
@@ -72,7 +72,7 @@ export default function LoginForm() {
               <div className="flex justify-center gap-2">
                 Немає акаунту?
                 <Link
-                  href="/auth/register"
+                  href="/register"
                   className="text-blue-500 hover:underline"
                 >
                   Зареєструватися

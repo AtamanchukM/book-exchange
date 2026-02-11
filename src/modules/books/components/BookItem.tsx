@@ -3,24 +3,33 @@ import Link from "next/link";
 import placeholder from "../images/placeholder.png";
 import { BookData } from "../types/book.types";
 import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
-import { useState } from "react";
-
-export default function BookItem({ book }: { book: BookData }) {
+import { useState, ReactNode } from "react";
+import { SlLocationPin } from "react-icons/sl";
+import truncateText from "../utils/truncateText";
+import { motion } from "motion/react";
+export default function BookItem({
+  book,
+  renderedActions,
+}: {
+  book: BookData;
+  renderedActions?: ReactNode;
+}) {
   const [isFavorite, setIsFavorite] = useState(false);
 
   return (
-    <div className="flex flex-col w-full h-full overflow-hidden transition-transform bg-white shadow-lg rounded-2xl hover:shadow-xl hover:-translate-y-1 ">
+    <motion.div
+      whileHover={{ y: -5 }}
+      className="flex flex-col w-full h-full overflow-hidden bg-white shadow-lg rounded-2xl "
+    >
       <Link href={`/books/${book.id}`} className="flex flex-col grow">
-        {/* Обкладинка */}
-        <div className="relative w-full overflow-hidden bg-gray-300">
+        <div className="relative w-full overflow-hidden bg-gray-300 aspect-2/3">
           <Image
             src={book.photoUrl || placeholder}
             alt={book.name}
             width={250}
             height={350}
-            className="object-cover w-full h-full hover:scale-[1.05] transition-transform duration-300"
+            className="object-cover w-full h-full hover:scale-[1.05] transition-transform duration-300 "
           />
-          {/* Серце */}
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -39,25 +48,31 @@ export default function BookItem({ book }: { book: BookData }) {
           </span>
         </div>
 
-        {/* Информація */}
-        <div className="flex flex-col gap-3 p-4">
-          {/* Категорія */}
+        <div className="flex flex-col gap-2 p-4 grow">
+          <div className="flex flex-col gap-2 pb-2 border-b border-gray-200 ">
+            <h2 className="text-lg font-bold text-gray-900 line-clamp-2">
+              {book.name}
+            </h2>
 
-          {/* Назва */}
-          <h2 className="text-lg font-bold text-gray-900 line-clamp-2">
-            {book.name}
-          </h2>
+            <p className="text-sm text-gray-600 truncate">
+              {truncateText(book.author || "", 25)}
+            </p>
+          </div>
 
-          {/* Автор */}
-          <p className="text-sm text-gray-600">{book.author}</p>
-
-          {/* Місто та користувач */}
-          <div className="flex items-center gap-2 text-xs text-gray-500">
-            <span>📍 {book.city || "Місто"}</span>
-            <span>@{book.ownerName || "user"}</span>
+          <div className="flex items-center justify-between gap-2 text-xs text-gray-500 truncate">
+            <span className="flex items-center gap-2">
+              <SlLocationPin size={14} className="shrink-0" />
+              {truncateText(book.city || "Місто", 15)}
+            </span>
+            <span className="truncate">
+              @{truncateText(book.ownerName || "user", 15)}
+            </span>
           </div>
         </div>
       </Link>
-    </div>
+      {renderedActions && (
+        <div className="flex justify-center w-full">{renderedActions}</div>
+      )}
+    </motion.div>
   );
 }

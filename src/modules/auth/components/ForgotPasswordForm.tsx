@@ -17,7 +17,7 @@ export default function ForgotPasswordForm() {
           try {
             await restore(values.emailRestore);
             alert("Інструкції для відновлення паролю надіслано на email!");
-            router.push("/auth/login");
+            router.push("/login");
           } catch (error: any) {
             alert(error.message);
           } finally {
@@ -50,7 +50,7 @@ export default function ForgotPasswordForm() {
             <div className="text-sm mt-2 flex justify-center gap-2">
               Вже є акаунт?
               <Link
-                href="/auth/login"
+                href="/login"
                 className="text-blue-500 hover:underline"
               >
                 Увійти

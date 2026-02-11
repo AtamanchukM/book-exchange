@@ -20,7 +20,6 @@ export default function Books() {
         loading={loading}
         hasMore={hasMore}
         loadMore={loadMore}
-        renderActions={(book) => <Details id={book.id} />}
       />
     </ProtectedRoute>
   );

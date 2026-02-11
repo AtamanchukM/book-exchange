@@ -45,7 +45,7 @@ export default function BookList({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
           >
-            <BookItem book={book} />
+            <BookItem book={book} renderedActions={renderActions?.(book)} />
           </motion.li>
         ))}
       </ul>

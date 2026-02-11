@@ -9,29 +9,23 @@ import {
   QueryDocumentSnapshot,
 } from "firebase/firestore";
 import { BookData } from "@/modules/books/types/book.types";
-// Припускаємо, що 'db' - це ваш екземпляр Firestore
-// const db = getFirestore(app);
-import { db } from "@/modules/auth/lib/firebase/firebase"; // Замініть на ваш шлях до конфігурації Firebase
-
-const booksCollection = collection(db, "books"); // Ваш об'єкт колекції
+import { db } from "@/modules/auth/lib/firebase/firebase";
+const booksCollection = collection(db, "books");
 
 export const fetchBooks = async (
-  pageSize: number, // Кількість книг для завантаження, наприклад, 5
-  lastVisibleDoc: QueryDocumentSnapshot<DocumentData> | null = null // Останній видимий документ з попереднього завантаження
+  pageSize: number,
+  lastVisibleDoc: QueryDocumentSnapshot<DocumentData> | null = null,
 ): Promise<{
   books: BookData[];
   lastVisible: QueryDocumentSnapshot<DocumentData> | null;
 }> => {
   let q;
 
-  // Базовий запит з сортуванням і лімітом
   const baseQuery = query(booksCollection, orderBy("name"));
 
   if (lastVisibleDoc) {
-    // Якщо є lastVisibleDoc, починаємо після нього
     q = query(baseQuery, startAfter(lastVisibleDoc), limit(pageSize));
   } else {
-    // Якщо це перше завантаження, просто застосовуємо ліміт
     q = query(baseQuery, limit(pageSize));
   }
 
@@ -41,7 +35,6 @@ export const fetchBooks = async (
     booksList.push({ ...doc.data(), id: doc.id } as BookData);
   });
 
-  // Зберігаємо останній документ, щоб використовувати його для наступного запиту
   const newLastVisible =
     querySnapshot.docs[querySnapshot.docs.length - 1] || null;
 

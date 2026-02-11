@@ -10,7 +10,10 @@ export const useUserBooksStore = create<{
   setBooks: (books) => set({ books }),
 }));
 
-export function useUserBooks(userId: string | undefined, pageSize: number = 3) {
+export function useUserBooks(
+  userId: string | undefined,
+  pageSize: number = 10,
+) {
   const [loading, setLoading] = useState(true);
   const [lastVisible, setLastVisible] = useState<any>(null);
   const books = useUserBooksStore((s) => s.books);
@@ -25,19 +28,23 @@ export function useUserBooks(userId: string | undefined, pageSize: number = 3) {
         return;
       }
       setLoading(true);
-      const { books: initialBooks, lastVisible: initialLastVisible } = await fetchUserBooks(userId, pageSize);
+      const { books: initialBooks, lastVisible: initialLastVisible } =
+        await fetchUserBooks(userId, pageSize);
       if (!ignore) setBooks(initialBooks);
       setLastVisible(initialLastVisible);
       setLoading(false);
     };
     loadInitial();
-    return () => { ignore = true; };
+    return () => {
+      ignore = true;
+    };
   }, [userId, pageSize, setBooks]);
 
   const loadMore = async () => {
     if (!userId || !lastVisible) return;
     setLoading(true);
-    const { books: nextBooks, lastVisible: nextLastVisible } = await fetchUserBooks(userId, pageSize, lastVisible);
+    const { books: nextBooks, lastVisible: nextLastVisible } =
+      await fetchUserBooks(userId, pageSize, lastVisible);
     setBooks([...books, ...nextBooks]);
     setLastVisible(nextLastVisible);
     setLoading(false);

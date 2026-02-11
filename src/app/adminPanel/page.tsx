@@ -28,8 +28,8 @@ export default function AdminPanel() {
   return (
     <ProtectedAdmin>
       <Container>
-        <h1 className="text-white text-3xl">Admin Panel</h1>
-        <span className="text-white text-2xl">
+        <h1 className="text-3xl text-white">Admin Panel</h1>
+        <span className="text-2xl text-white">
           Users: {users.map((user) => user.name).join(", ")}
         </span>
         <BookList
@@ -37,12 +37,7 @@ export default function AdminPanel() {
           hasMore={hasMore}
           loadMore={loadMore}
           books={filteredBooks(Allbooks, query)}
-          renderActions={(book) => (
-            <div className="flex flex-col justify-center gap-2">
-              <DeleteBook id={book.id} />
-              <Details id={book.id} />
-            </div>
-          )}
+          renderActions={(book) => <DeleteBook id={book.id} />}
         />
       </Container>
     </ProtectedAdmin>

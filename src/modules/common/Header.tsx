@@ -3,12 +3,13 @@ import { useAuthStore } from "@/modules/auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSearchStore } from "@/modules/auth/stores/useSearchStore";
-import ProtectedRoute from "../middlware/ProtectedRoute";
+import ProtectedRoute from "../auth/middlware/ProtectedRoute";
 import { LiaSwatchbookSolid } from "react-icons/lia";
 import { IoBookOutline } from "react-icons/io5";
 import { CiUser } from "react-icons/ci";
 import { HiMenu, HiX } from "react-icons/hi";
 import { useState, useRef, useEffect } from "react";
+import { GrUserAdmin } from "react-icons/gr";
 
 export default function Header() {
   const user = useAuthStore((state) => state.user);
@@ -103,8 +104,13 @@ export default function Header() {
             {user?.role === "admin" && (
               <Link
                 href="/adminPanel"
-                className="px-4 py-1 ml-2 font-semibold text-blue-300 transition border border-blue-400 rounded hover:bg-blue-800"
+                className={`flex items-center gap-2 px-4 py-2 rounded-md transition ${
+                  isActive("/adminPanel")
+                    ? "bg-amber-100 text-amber-600 "
+                    : "text-stone-900 hover:bg-amber-100"
+                }`}
               >
+                <GrUserAdmin size={20} />
                 Адмін-панель
               </Link>
             )}

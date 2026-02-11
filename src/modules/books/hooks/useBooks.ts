@@ -11,7 +11,7 @@ export const useBooksStore = create<{
   setAllBooks: (books) => set({ Allbooks: books }),
 }));
 
-export function useBooks(pageSize: number = 3) {
+export function useBooks(pageSize: number = 10) {
   const [loading, setLoading] = useState(true);
   const [lastVisible, setLastVisible] = useState<any>(null);
   const [reloadTrigger, setReloadTrigger] = useState(0);
@@ -35,7 +35,7 @@ export function useBooks(pageSize: number = 3) {
     setLoading(true);
     const { books: nextBooks, lastVisible: nextLastVisible } = await fetchBooks(
       pageSize,
-      lastVisible
+      lastVisible,
     );
     setAllBooks([...Allbooks, ...nextBooks]);
     setLastVisible(nextLastVisible);

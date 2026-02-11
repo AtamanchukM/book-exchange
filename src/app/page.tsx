@@ -53,7 +53,6 @@ export default function Home() {
         loading={loading}
         hasMore={hasMore}
         loadMore={loadMore}
-        renderActions={(book) => <Details id={book.id} />}
       />
     </section>
   );
