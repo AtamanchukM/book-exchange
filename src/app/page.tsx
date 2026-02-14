@@ -11,7 +11,7 @@ import {
 } from "@/modules/auth/stores/useSearchStore";
 
 export default function Home() {
-  const { Allbooks, loading, hasMore, loadMore } = useBooks();
+  const { books, loading, hasMore, loadMore } = useBooks();
   const query = useSearchStore((s) => s.query);
   return (
     <section className="">
@@ -49,7 +49,7 @@ export default function Home() {
         </div>
       </div>
       <BookList
-        books={filteredBooks(Allbooks, query)}
+        books={filteredBooks(books, query)}
         loading={loading}
         hasMore={hasMore}
         loadMore={loadMore}

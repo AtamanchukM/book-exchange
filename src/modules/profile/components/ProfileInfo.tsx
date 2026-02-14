@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import type { AuthUser } from "@/modules/auth/types/auth.types";
 import { SlLocationPin } from "react-icons/sl";
+import defaultAvatar from "../images/default-avatar.png";
 
 import type {
   BookData,
@@ -10,7 +11,6 @@ import type {
 import { CiMail } from "react-icons/ci";
 
 type ProfileUser = AuthUser & {
-  username?: string;
   location?: string;
   rating?: number | string;
 };
@@ -36,7 +36,7 @@ export default function ProfileInfo({
           <div className="-mt-20">
             <div className="rounded-full border-12 border-white  overflow-hidden w-32 h-32 bg-gray-200">
               <Image
-                src={user?.avatar || "/default-avatar.png"}
+                src={user?.avatar || defaultAvatar}
                 alt="Аватар користувача"
                 width={128}
                 height={128}
@@ -59,17 +59,15 @@ export default function ProfileInfo({
           <h1 className="text-4xl font-bold text-black mb-1">
             {user?.name || "Користувач"}
           </h1>
-          <p className="text-gray-500 text-lg mb-4">
-            @{user?.username || "username"}
-          </p>
+
           <div className="flex gap-6 text-gray-600 flex-col">
-            <div className="flex items-center gap-2">
-              <SlLocationPin className="h-5 w-5 text-gray-400" />
-              <span>{user?.location || "Місто, Країна"}</span>
-            </div>
             <div className="flex items-center gap-2">
               <CiMail className="h-5 w-5 text-gray-400" />
               <span>{user?.email || "email@example.com"}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <SlLocationPin className="h-5 w-5 text-gray-400" />
+              <span>{user?.location || "Місто, Країна"}</span>
             </div>
           </div>
         </div>

@@ -1,17 +1,68 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { addBookSchema } from "@/modules/books/lib/schema/addBookSchema";
 import { addBook } from "@/modules/books/services/addBook";
-import Container from "@/modules/common/Container";
 import { useAuthStore } from "@/modules/auth/stores/useAuthStore";
+import { useEffect } from "react";
 
-export default function AddBookForm() {
+type AddBookFormProps = {
+  isOpen?: boolean;
+  onClose?: () => void;
+};
+
+const bookCategories = [
+  { value: "fiction", label: "Художня література" },
+  { value: "non-fiction", label: "Нехудожня література" },
+  { value: "science", label: "Наукова література" },
+  { value: "history", label: "Історична література" },
+  { value: "children", label: "Дитяча література" },
+  { value: "biography", label: "Біографія" },
+  { value: "fantasy", label: "Фентезі" },
+  { value: "mystery", label: "Детектив" },
+  { value: "romance", label: "Роман" },
+  { value: "thriller", label: "Трилер" },
+  { value: "self-help", label: "Самодопомога" },
+];
+
+export default function AddBookForm({
+  isOpen = true,
+  onClose,
+}: AddBookFormProps) {
   const user = useAuthStore((state) => state.user);
 
-  return (
-    <Container>
-      <div className="flex flex-col w-full max-w-md m-auto gap-4 mt-10 bg-gray-800 p-8 rounded-lg shadow-lg">
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && onClose) onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  const modalContent = (
+    <div className="w-full max-w-lg rounded-2xl bg-white shadow-xl">
+      <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900">Додати книгу</h2>
+          <p className="text-sm text-gray-500">
+            Додайте нову книгу до вашої колекції
+          </p>
+        </div>
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full border border-gray-200 px-3 py-1 text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300"
+            aria-label="Закрити"
+          >
+            x
+          </button>
+        )}
+      </div>
+      <div className="px-6 py-5">
         <Formik
-          initialValues={{ name: "", author: "", photoUrl: "" }}
+          initialValues={{ name: "", author: "", photoUrl: "", category: "" }}
           validationSchema={addBookSchema}
           onSubmit={async (values, { resetForm }) => {
             const newBook = {
@@ -22,78 +73,121 @@ export default function AddBookForm() {
               createdAt: new Date().toISOString(),
               ownerId: user?.uid || "",
               ownerName: user?.name || "",
+              category: values.category,
             };
             await addBook(newBook);
             resetForm();
           }}
         >
           {({ isSubmitting }) => (
-            <Form className="flex flex-col gap-5">
-              <h2 className="text-2xl font-bold text-white mb-1 ">Додати книгу</h2>
-              <div className="flex flex-col gap-1">
-                <label htmlFor="name" className="text-white font-medium ">Назва книги</label>
+            <Form className="flex flex-col gap-4">
+              <label className="flex flex-col gap-1 text-sm font-medium text-gray-700">
+                Назва книги
                 <Field
                   type="text"
                   name="name"
-                  id="name"
-                  className="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-900 text-white"
-                  placeholder="Book Name"
+                  className="rounded-lg border border-gray-200 px-3 py-2 text-gray-900 outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-200"
+                  placeholder="Назва книги"
                 />
-                <div className="min-h-[20px]">
-                  <ErrorMessage
-                    name="name"
-                    component="div"
-                    className="text-red-400 text-sm"
-                  />
-                </div>
-              </div>
+                <ErrorMessage
+                  name="name"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </label>
 
-              <div className="flex flex-col gap-1">
-                <label htmlFor="author" className="text-white font-medium">Автор</label>
+              <label className="flex flex-col gap-1 text-sm font-medium text-gray-700">
+                Автор
                 <Field
                   type="text"
                   name="author"
-                  id="author"
-                  className="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-900 text-white"
-                  placeholder="Author"
+                  className="rounded-lg border border-gray-200 px-3 py-2 text-gray-900 outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-200"
+                  placeholder="Автор книги"
                 />
-                <div className="min-h-[20px]">
-                  <ErrorMessage
-                    name="author"
-                    component="div"
-                    className="text-red-400 text-sm"
-                  />
-                </div>
-              </div>
+                <ErrorMessage
+                  name="author"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </label>
 
-              <div className="flex flex-col gap-1">
-                <label htmlFor="photoUrl" className="text-white font-medium">Фото (URL)</label>
+              <label className="flex flex-col gap-1 text-sm font-medium text-gray-700">
+                Фото (URL)
                 <Field
                   type="text"
                   name="photoUrl"
-                  id="photoUrl"
-                  className="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-900 text-white"
-                  placeholder="Photo URL"
+                  className="rounded-lg border border-gray-200 px-3 py-2 text-gray-900 outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-200"
+                  placeholder="Посилання на фото"
                 />
-                <div className="min-h-[20px]">
-                  <ErrorMessage
-                    name="photoUrl"
-                    component="div"
-                    className="text-red-400 text-sm"
-                  />
-                </div>
-              </div>
-              <button
-                type="submit"
-                className="bg-blue-500 hover:bg-blue-700 transition-all text-white px-4 py-2 rounded font-semibold mt-2"
-                disabled={isSubmitting}
-              >
-                Додати книгу
-              </button>
+                <ErrorMessage
+                  name="photoUrl"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </label>
+
+              <label className="flex flex-col gap-1 text-sm font-medium text-gray-700">
+                Категорія
+                <Field
+                  as="select"
+                  name="category"
+                  className="rounded-lg border border-gray-200 px-3 py-2 text-gray-900 outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-200"
+                >
+                  {bookCategories.map((category) => (
+                    <option key={category.value} value={category.value}>
+                      {category.label}
+                    </option>
+                  ))}
+                </Field>
+                <ErrorMessage
+                  name="category"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </label>
+
+              <label className="flex flex-col gap-1 text-sm font-medium text-gray-700">
+                {onClose && (
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="rounded-full border border-gray-200 px-5 py-2 text-sm font-medium text-gray-600 hover:border-gray-300 hover:text-gray-800"
+                  >
+                    Скасувати
+                  </button>
+                )}
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="rounded-full bg-amber-500 px-6 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-600 disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  Додати книгу
+                </button>
+              </label>
             </Form>
           )}
         </Formik>
       </div>
-    </Container>
+    </div>
   );
+
+  if (onClose) {
+    return (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+        onClick={onClose}
+      >
+        <div
+          onClick={(event) => event.stopPropagation()}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Додати книгу"
+        >
+          {modalContent}
+        </div>
+      </div>
+    );
+  }
+
+  return modalContent;
 }

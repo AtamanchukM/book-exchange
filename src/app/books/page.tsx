@@ -1,5 +1,5 @@
 "use client";
-import ProtectedRoute from "@/modules/auth/middlware/ProtectedRoute";
+import ProtectedRoute from "@/modules/auth/middleware/ProtectedRoute";
 import Container from "@/modules/common/Container";
 import BookList from "@/modules/books/components/BookList";
 import { useBooks } from "@/modules/books/hooks/useBooks";
@@ -10,13 +10,13 @@ import {
 } from "@/modules/auth/stores/useSearchStore";
 
 export default function Books() {
-  const { Allbooks, loading, hasMore, loadMore } = useBooks();
+  const { books, loading, hasMore, loadMore } = useBooks();
   const query = useSearchStore((s) => s.query);
 
   return (
     <ProtectedRoute>
       <BookList
-        books={filteredBooks(Allbooks, query)}
+        books={filteredBooks(books, query)}
         loading={loading}
         hasMore={hasMore}
         loadMore={loadMore}

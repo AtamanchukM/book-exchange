@@ -3,7 +3,7 @@
 import { useAuthStore } from "@/modules/auth/stores/useAuthStore";
 import { useEffect, useState } from "react";
 import { fetchUserBooks } from "@/modules/books/services/fetchUserBooks";
-import { getExchangeRequestsForUser } from "@/modules/books/services/exchangeRequests";
+import { getIncomingRequests } from "@/modules/books/services/exchangeRequests";
 import ProfileForm from "@/modules/profile/components/ProfileForm";
 import ProfileHistory from "@/modules/profile/components/ProfileHistory";
 import ExchangeManagement from "@/modules/profile/components/ExchangeManagement";
@@ -34,7 +34,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!userId) return;
-    getExchangeRequestsForUser(userId).then(setRequests);
+    getIncomingRequests(userId).then(setRequests);
   }, [userId]);
 
   return (

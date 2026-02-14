@@ -1,6 +1,8 @@
 import "@/styles/globals.css";
 import Header from "@/modules/common/Header";
 import Footer from "@/modules/common/Footer";
+import { AuthInitializer } from "@/modules/auth";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -9,6 +11,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex flex-col min-h-screen">
+        <AuthInitializer />
         <Header />
 
         <main className="pt-[70px] flex-1">{children}</main>

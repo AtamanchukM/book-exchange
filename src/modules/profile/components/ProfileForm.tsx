@@ -2,7 +2,8 @@
 
 import { Formik, Form, Field } from "formik";
 import { useEffect } from "react";
-import { changeProfile, useAuthStore } from "@/modules/auth";
+import { useAuthStore } from "@/modules/auth";
+import { changeProfile } from "../services/changeProfile";
 import type { ProfileFormValues } from "@/modules/auth/types/auth.types";
 
 type ProfileFormProps = {

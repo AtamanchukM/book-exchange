@@ -20,6 +20,6 @@ export interface BookData {
   ownerEmail?: string;
   ownerId: string;
   ownerName: string;
+  ownerLocation: string;
   category?: string;
-  city?: string;
 }

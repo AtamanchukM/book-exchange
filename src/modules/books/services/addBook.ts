@@ -3,10 +3,12 @@ import { booksCollection } from "@/modules/auth/lib/firebase/firebase";
 import type { BookData } from "@/modules/books/types/book.types";
 import { useAuthStore } from "@/modules/auth/stores/useAuthStore";
 import { useUserBooksStore } from "@/modules/books/hooks/useUserBooks";
+import { useBooksStore } from "@/modules/books/hooks/useBooks";
 
 export const addBook = async (bookData: BookData) => {
   const user = useAuthStore.getState().user;
-  const books = useUserBooksStore.getState().books;
+  const userBooks = useUserBooksStore.getState().books;
+  const allBooks = useBooksStore.getState().books;
 
   try {
     // Використовуємо setDoc, щоб id документа збігався з id книги
@@ -14,12 +16,17 @@ export const addBook = async (bookData: BookData) => {
       ...bookData,
       createdAt: new Date(),
       ownerName: user?.name,
+      ownerLocation: user?.location,
       ownerId: user?.uid,
       ownerEmail: user?.email,
+      category: bookData.category,
     });
-    useUserBooksStore.setState({ books: [...books, bookData] });
-    console.log("Книга успішно додана з ID: ", bookData.id);
 
+    // Оновлюємо обидві store
+    useUserBooksStore.setState({ books: [...userBooks, bookData] });
+    useBooksStore.setState({ books: [...allBooks, bookData] });
+
+    console.log("Книга успішно додана з ID: ", bookData.id);
     return bookData.id;
   } catch (e) {
     console.error("Помилка при додаванні книги: ", e);

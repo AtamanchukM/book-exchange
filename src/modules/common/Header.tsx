@@ -3,7 +3,7 @@ import { useAuthStore } from "@/modules/auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSearchStore } from "@/modules/auth/stores/useSearchStore";
-import ProtectedRoute from "../auth/middlware/ProtectedRoute";
+import ProtectedRoute from "../auth/middleware/ProtectedRoute";
 import { LiaSwatchbookSolid } from "react-icons/lia";
 import { IoBookOutline } from "react-icons/io5";
 import { CiUser } from "react-icons/ci";

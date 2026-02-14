@@ -44,14 +44,14 @@ export default function BookItem({
             )}
           </button>
           <span className="absolute px-3 py-1 text-xs font-semibold text-gray-900 bg-white rounded-full bottom-2 left-2">
-            {book.category || "Книга"}
+            {truncateText(book.category || "Книга", 15)}
           </span>
         </div>
 
         <div className="flex flex-col gap-2 p-4 grow">
           <div className="flex flex-col gap-2 pb-2 border-b border-gray-200 ">
             <h2 className="text-lg font-bold text-gray-900 line-clamp-2">
-              {book.name}
+              {truncateText(book.name || "", 25)}
             </h2>
 
             <p className="text-sm text-gray-600 truncate">
@@ -62,7 +62,7 @@ export default function BookItem({
           <div className="flex items-center justify-between gap-2 text-xs text-gray-500 truncate">
             <span className="flex items-center gap-2">
               <SlLocationPin size={14} className="shrink-0" />
-              {truncateText(book.city || "Місто", 15)}
+              {truncateText(book.ownerLocation || "Місто", 15)}
             </span>
             <span className="truncate">
               @{truncateText(book.ownerName || "user", 15)}

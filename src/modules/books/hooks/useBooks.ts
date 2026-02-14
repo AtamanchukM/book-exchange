@@ -4,48 +4,56 @@ import type { BookData } from "@/modules/books";
 import { create } from "zustand";
 
 export const useBooksStore = create<{
-  Allbooks: BookData[];
-  setAllBooks: (books: BookData[]) => void;
+  books: BookData[];
+  setBooks: (books: BookData[]) => void;
 }>((set) => ({
-  Allbooks: [],
-  setAllBooks: (books) => set({ Allbooks: books }),
+  books: [],
+  setBooks: (books) => set({ books }),
 }));
 
 export function useBooks(pageSize: number = 10) {
   const [loading, setLoading] = useState(true);
   const [lastVisible, setLastVisible] = useState<any>(null);
   const [reloadTrigger, setReloadTrigger] = useState(0);
-  const Allbooks = useBooksStore((s) => s.Allbooks);
-  const setAllBooks = useBooksStore((s) => s.setAllBooks);
+  const books = useBooksStore((s) => s.books);
+  const setBooks = useBooksStore((s) => s.setBooks);
 
   useEffect(() => {
     const loadInitial = async () => {
       setLoading(true);
-      const { books: initialBooks, lastVisible: initialLastVisible } =
-        await fetchBooks(pageSize);
-      setAllBooks(initialBooks);
-      setLastVisible(initialLastVisible);
-      setLoading(false);
+      try {
+        const { books: initialBooks, lastVisible: initialLastVisible } =
+          await fetchBooks(pageSize);
+        setBooks(initialBooks);
+        setLastVisible(initialLastVisible);
+      } catch (error) {
+        console.error("Error loading books:", error);
+      } finally {
+        setLoading(false);
+      }
     };
     loadInitial();
-  }, [pageSize, reloadTrigger, setAllBooks]);
+  }, [pageSize, reloadTrigger, setBooks]);
 
   const loadMore = async () => {
     if (!lastVisible) return;
     setLoading(true);
-    const { books: nextBooks, lastVisible: nextLastVisible } = await fetchBooks(
-      pageSize,
-      lastVisible,
-    );
-    setAllBooks([...Allbooks, ...nextBooks]);
-    setLastVisible(nextLastVisible);
-    setLoading(false);
+    try {
+      const { books: nextBooks, lastVisible: nextLastVisible } =
+        await fetchBooks(pageSize, lastVisible);
+      setBooks([...books, ...nextBooks]);
+      setLastVisible(nextLastVisible);
+    } catch (error) {
+      console.error("Error loading more books:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const hasMore = !!lastVisible;
+  const hasMore = books.length > 0 && lastVisible !== null;
 
   return {
-    Allbooks,
+    books,
     loading,
     loadMore,
     hasMore,

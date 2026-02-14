@@ -6,7 +6,7 @@ import { useBooksStore } from "@/modules/books/hooks/useBooks";
 
 export const deleteBook = async (bookId: string) => {
   const books = useUserBooksStore.getState().books;
-  const allBooks = useBooksStore.getState().Allbooks;
+  const allBooks = useBooksStore.getState().books;
   const user = useAuthStore.getState().user;
   if (!user) throw new Error("Not authenticated");
   // Отримуємо книгу, щоб перевірити ownerId
@@ -23,7 +23,7 @@ export const deleteBook = async (bookId: string) => {
       books: books.filter((book) => book.id !== bookId),
     });
     useBooksStore.setState({
-      Allbooks: allBooks.filter((book) => book.id !== bookId),
+      books: allBooks.filter((book) => book.id !== bookId),
     });
 
     console.log("Книга успішно видалена з ID:", bookId);

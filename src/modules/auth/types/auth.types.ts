@@ -9,6 +9,7 @@ export interface AuthUser {
   email: string;
   restoreEmail?: string;
   role?: string;
+  location?: string;
   token?: string;
   avatar?: string;
 }
@@ -18,11 +19,17 @@ export interface AuthState {
   loading: boolean;
   error: string | null;
   success?: string | null;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  register: (
+    name: string,
+    email: string,
+    password: string,
+    location: string,
+  ) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   restore: (email: string) => Promise<void>;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   resetAuth: () => void;
+  initializeAuth: () => Promise<void>;
 }
