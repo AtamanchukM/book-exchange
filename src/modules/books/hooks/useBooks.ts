@@ -14,13 +14,24 @@ export const useBooksStore = create<{
   setBooks: (books) => set({ books }),
 }));
 
-export function useBooks(pageSize: number = 10, ownerId?: string) {
+export function useBooks(
+  pageSize: number = 10,
+  ownerId?: string,
+  enabled: boolean = true,
+) {
   const [loading, setLoading] = useState(true);
   const [lastVisible, setLastVisible] = useState<LastVisibleDoc>(null);
   const books = useBooksStore((s) => s.books);
   const setBooks = useBooksStore((s) => s.setBooks);
 
   useEffect(() => {
+    if (!enabled) {
+      setBooks([]);
+      setLastVisible(null);
+      setLoading(false);
+      return;
+    }
+
     const loadInitial = async () => {
       setLoading(true);
       try {
@@ -35,9 +46,10 @@ export function useBooks(pageSize: number = 10, ownerId?: string) {
       }
     };
     loadInitial();
-  }, [pageSize, ownerId, setBooks]);
+  }, [enabled, pageSize, ownerId, setBooks]);
 
   const loadMore = async () => {
+    if (!enabled) return;
     if (!lastVisible) return;
     setLoading(true);
     try {

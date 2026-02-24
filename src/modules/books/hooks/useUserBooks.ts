@@ -10,7 +10,7 @@ export function useUserBooks(
     loading,
     loadMore,
     hasMore,
-  } = useBooks(pageSize, userId);
+  } = useBooks(pageSize, userId, Boolean(userId));
 
   const books = useMemo(() => {
     if (!userId) return [];

@@ -79,6 +79,7 @@ export default function AddBookForm({
               createdAt: new Date().toISOString(),
               ownerId: user?.uid || "",
               ownerName: user?.name || "",
+              ownerLocation: user?.location || "",
               category: values.category,
               description: values.description,
             };

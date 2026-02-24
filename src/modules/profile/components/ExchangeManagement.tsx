@@ -361,8 +361,7 @@ function OutgoingRequestsTab({ requests }: { requests: ExchangeRequest[] }) {
           </div>
           {req.offeredBooks && (
             <p className="text-sm text-gray-700 mb-2">
-              <span className="font-medium">Ви пропонуєте:</span>{" "}
-              {req.offeredBooks}
+              <span className="font-medium">Ви пропонуєте:</span> {req.bookName}
             </p>
           )}
           <p className="text-sm text-gray-600 mb-2">{req.message}</p>
