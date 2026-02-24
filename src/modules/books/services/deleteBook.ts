@@ -1,11 +1,9 @@
 import { doc, deleteDoc, getDoc } from "@firebase/firestore";
 import { booksCollection } from "@/modules/auth/lib/firebase/firebase";
 import { useAuthStore } from "@/modules/auth/stores/useAuthStore";
-import { useUserBooksStore } from "@/modules/books/hooks/useUserBooks";
 import { useBooksStore } from "@/modules/books/hooks/useBooks";
 
 export const deleteBook = async (bookId: string) => {
-  const books = useUserBooksStore.getState().books;
   const allBooks = useBooksStore.getState().books;
   const user = useAuthStore.getState().user;
   if (!user) throw new Error("Not authenticated");
@@ -19,9 +17,6 @@ export const deleteBook = async (bookId: string) => {
   }
   try {
     await deleteDoc(doc(booksCollection, bookId));
-    useUserBooksStore.setState({
-      books: books.filter((book) => book.id !== bookId),
-    });
     useBooksStore.setState({
       books: allBooks.filter((book) => book.id !== bookId),
     });

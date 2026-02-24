@@ -10,7 +10,7 @@ import {
   filteredBooks,
 } from "@/modules/auth/stores/useSearchStore";
 import { useEffect, useState } from "react";
-import { fetchAllUsers } from "@/modules/auth/services/fetchAllUsers";
+import { fetchAllUsers } from "@/modules/profile/services/fetchAllUsers";
 import { DocumentData } from "firebase/firestore";
 
 export default function AdminPanel() {
@@ -28,8 +28,7 @@ export default function AdminPanel() {
   return (
     <ProtectedAdmin>
       <Container>
-        <h1 className="text-3xl text-white">Admin Panel</h1>
-        <span className="text-2xl text-white">
+        <span className="text-2xl">
           Users: {users.map((user) => user.name).join(", ")}
         </span>
         <BookList

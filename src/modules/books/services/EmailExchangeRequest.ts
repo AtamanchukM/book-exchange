@@ -18,8 +18,8 @@ export async function sendBookExchangeEmail({
     toEmail,
   });
   const response = await emailjs.send(
-    "service_d1i3c48",
-    "template_q7xf9lt",
+    process.env.NEXT_PUBLIC_EMAIL_JS_SERVICE_ID!,
+    process.env.NEXT_PUBLIC_EMAIL_JS_TEMPLATE_ID!,
     {
       fromEmail: user.email,
       fromUser: user.name,
@@ -28,7 +28,7 @@ export async function sendBookExchangeEmail({
       RequestBook: book.name,
       booksForExchange: offeredBooks.map((b) => b.name).join(", "),
     },
-    "NnuGcqnH14lVkJRbj"
+    process.env.NEXT_PUBLIC_EMAIL_JS_PUBLIC_KEY!,
   );
   console.log("sendBookExchangeEmail response:", response);
   return response;

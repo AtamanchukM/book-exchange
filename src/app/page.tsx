@@ -4,7 +4,6 @@ import Image from "next/image";
 import mainBooks from "./assets/mainBooks.jpg";
 import BookList from "@/modules/books/components/BookList";
 import { useBooks } from "@/modules/books/hooks/useBooks";
-import Details from "@/modules/books/components/Details";
 import {
   useSearchStore,
   filteredBooks,

@@ -2,38 +2,27 @@
 
 import { useAuthStore } from "@/modules/auth/stores/useAuthStore";
 import { useEffect, useState } from "react";
-import { fetchUserBooks } from "@/modules/books/services/fetchUserBooks";
 import { getIncomingRequests } from "@/modules/books/services/exchangeRequests";
 import ProfileForm from "@/modules/profile/components/ProfileForm";
-import ProfileHistory from "@/modules/profile/components/ProfileHistory";
 import ExchangeManagement from "@/modules/profile/components/ExchangeManagement";
-import { BookData, ExchangeRequest } from "@/modules/books/types/book.types";
+import { ExchangeRequest } from "@/modules/books/types/book.types";
 import Container from "@/modules/common/Container";
 import ProfileInfo from "@/modules/profile/components/ProfileInfo";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FiLogOut } from "react-icons/fi";
 import Link from "next/link";
-import { MdHistoryToggleOff } from "react-icons/md";
+import { useUserBooks } from "@/modules/books";
 
 export default function ProfilePage() {
   const user = useAuthStore((s) => s.user);
   const userId = user?.uid;
   const [requests, setRequests] = useState<ExchangeRequest[]>([]);
-  const [books, setBooks] = useState<BookData[]>([]);
+  const { books } = useUserBooks(userId);
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isExchangeOpen, setIsExchangeOpen] = useState(false);
   const logout = useAuthStore((s) => s.logout);
 
   useEffect(() => {
-    if (!userId) return;
-    fetchUserBooks(userId).then((res) => {
-      setBooks(res.books);
-    });
-  }, [userId]);
-
-  useEffect(() => {
-    if (!userId) return;
     getIncomingRequests(userId).then(setRequests);
   }, [userId]);
 
@@ -71,15 +60,7 @@ export default function ProfilePage() {
               <span>Управління обмінами</span>
             </button>
           </div>
-          <div className="">
-            <button
-              onClick={() => setIsHistoryOpen(true)}
-              className="flex items-center gap-2 text-black"
-            >
-              <MdHistoryToggleOff size={24} className=" text-gray-400" />
-              <span>Історія обмінів</span>
-            </button>
-          </div>
+
           <div className="">
             <Link
               href="/settings"
@@ -101,17 +82,12 @@ export default function ProfilePage() {
         </div>
       </div>
       <ProfileForm isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} />
-      <ProfileHistory
-        isOpen={isHistoryOpen}
-        onClose={() => setIsHistoryOpen(false)}
-        requests={requests}
-      />
+
       {userId && (
         <ExchangeManagement
           isOpen={isExchangeOpen}
           onClose={() => setIsExchangeOpen(false)}
           userId={userId}
-          currentUserName={user?.name}
         />
       )}
     </Container>

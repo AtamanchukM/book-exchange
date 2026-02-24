@@ -3,6 +3,9 @@ import { fetchBooks } from "@/modules/books";
 import type { BookData } from "@/modules/books";
 import { create } from "zustand";
 
+type FetchBooksResult = Awaited<ReturnType<typeof fetchBooks>>;
+type LastVisibleDoc = FetchBooksResult["lastVisible"];
+
 export const useBooksStore = create<{
   books: BookData[];
   setBooks: (books: BookData[]) => void;
@@ -11,10 +14,9 @@ export const useBooksStore = create<{
   setBooks: (books) => set({ books }),
 }));
 
-export function useBooks(pageSize: number = 10) {
+export function useBooks(pageSize: number = 10, ownerId?: string) {
   const [loading, setLoading] = useState(true);
-  const [lastVisible, setLastVisible] = useState<any>(null);
-  const [reloadTrigger, setReloadTrigger] = useState(0);
+  const [lastVisible, setLastVisible] = useState<LastVisibleDoc>(null);
   const books = useBooksStore((s) => s.books);
   const setBooks = useBooksStore((s) => s.setBooks);
 
@@ -23,7 +25,7 @@ export function useBooks(pageSize: number = 10) {
       setLoading(true);
       try {
         const { books: initialBooks, lastVisible: initialLastVisible } =
-          await fetchBooks(pageSize);
+          await fetchBooks(pageSize, null, ownerId);
         setBooks(initialBooks);
         setLastVisible(initialLastVisible);
       } catch (error) {
@@ -33,14 +35,14 @@ export function useBooks(pageSize: number = 10) {
       }
     };
     loadInitial();
-  }, [pageSize, reloadTrigger, setBooks]);
+  }, [pageSize, ownerId, setBooks]);
 
   const loadMore = async () => {
     if (!lastVisible) return;
     setLoading(true);
     try {
       const { books: nextBooks, lastVisible: nextLastVisible } =
-        await fetchBooks(pageSize, lastVisible);
+        await fetchBooks(pageSize, lastVisible, ownerId);
       setBooks([...books, ...nextBooks]);
       setLastVisible(nextLastVisible);
     } catch (error) {
@@ -57,7 +59,5 @@ export function useBooks(pageSize: number = 10) {
     loading,
     loadMore,
     hasMore,
-    setReloadTrigger,
-    reloadTrigger,
   };
 }

@@ -65,11 +65,13 @@ export async function loginService(
     const role = userDoc.exists() ? userDoc.data().role : "user";
     const name = userDoc.exists() ? userDoc.data().name : "";
     const avatar = userDoc.exists() ? userDoc.data().avatar : "";
+    const location = userDoc.exists() ? userDoc.data().location : "";
     return {
       user: {
         uid: res.user.uid,
         email: res.user.email!,
         name,
+        location,
         role,
         token,
         avatar,

@@ -106,7 +106,6 @@ export const useAuthStore = create<AuthState>()(
                 });
               }
             } else {
-              // Користувачі немає - очищуємо store
               set({ user: null, loading: false, error: null });
             }
             unsubscribe();

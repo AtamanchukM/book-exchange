@@ -22,4 +22,5 @@ export interface BookData {
   ownerName: string;
   ownerLocation: string;
   category?: string;
+  description?: string;
 }

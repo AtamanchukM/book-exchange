@@ -62,7 +62,13 @@ export default function AddBookForm({
       </div>
       <div className="px-6 py-5">
         <Formik
-          initialValues={{ name: "", author: "", photoUrl: "", category: "" }}
+          initialValues={{
+            name: "",
+            author: "",
+            photoUrl: "",
+            category: "",
+            description: "",
+          }}
           validationSchema={addBookSchema}
           onSubmit={async (values, { resetForm }) => {
             const newBook = {
@@ -74,6 +80,7 @@ export default function AddBookForm({
               ownerId: user?.uid || "",
               ownerName: user?.name || "",
               category: values.category,
+              description: values.description,
             };
             await addBook(newBook);
             resetForm();
@@ -121,6 +128,21 @@ export default function AddBookForm({
                 />
                 <ErrorMessage
                   name="photoUrl"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </label>
+
+              <label className="flex flex-col gap-1 text-sm font-medium text-gray-700">
+                Опис
+                <Field
+                  as="textarea"
+                  name="description"
+                  className="rounded-lg border border-gray-200 px-3 py-2 text-gray-900 outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-200"
+                  placeholder="Опис книги"
+                />
+                <ErrorMessage
+                  name="description"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />

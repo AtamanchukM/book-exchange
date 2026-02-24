@@ -2,6 +2,8 @@ import {
   collection,
   query,
   orderBy,
+  where,
+  QueryConstraint,
   limit,
   startAfter,
   getDocs,
@@ -15,19 +17,24 @@ const booksCollection = collection(db, "books");
 export const fetchBooks = async (
   pageSize: number,
   lastVisibleDoc: QueryDocumentSnapshot<DocumentData> | null = null,
+  ownerId?: string,
 ): Promise<{
   books: BookData[];
   lastVisible: QueryDocumentSnapshot<DocumentData> | null;
 }> => {
-  let q;
+  const constraints: QueryConstraint[] = [orderBy("name")];
 
-  const baseQuery = query(booksCollection, orderBy("name"));
+  if (ownerId) {
+    constraints.push(where("ownerId", "==", ownerId));
+  }
 
   if (lastVisibleDoc) {
-    q = query(baseQuery, startAfter(lastVisibleDoc), limit(pageSize));
-  } else {
-    q = query(baseQuery, limit(pageSize));
+    constraints.push(startAfter(lastVisibleDoc));
   }
+
+  constraints.push(limit(pageSize));
+
+  const q = query(booksCollection, ...constraints);
 
   const querySnapshot = await getDocs(q);
   const booksList: BookData[] = [];

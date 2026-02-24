@@ -17,6 +17,7 @@ export default function Mybooks() {
   const query = useSearchStore((s) => s.query);
 
   const { books, loadMore, hasMore } = useUserBooks(user?.uid);
+  console.log(books);
 
   return (
     <Container>

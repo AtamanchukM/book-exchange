@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAuthStore } from "@/modules/auth";
 import { useUserBooks } from "@/modules/books/hooks/useUserBooks";
 import { createExchangeRequest } from "@/modules/books/services/exchangeRequests";
-import { sendBookExchangeEmail } from "@/modules/books/services/bookExchange";
+import { sendBookExchangeEmail } from "@/modules/books/services/EmailExchangeRequest";
 import type { BookData } from "@/modules/books/types/book.types";
 import Image from "next/image";
 

@@ -22,18 +22,7 @@ export async function createExchangeRequest({
   message,
   status = "pending",
   createdAt = new Date().toISOString(),
-}: {
-  userId: string;
-  senderId?: string;
-  senderName?: string;
-  senderEmail?: string;
-  bookId?: string;
-  bookName?: string;
-  offeredBooks?: string;
-  message: string;
-  status?: "pending" | "accepted" | "rejected";
-  createdAt?: string;
-}) {
+}: Partial<ExchangeRequest>) {
   try {
     const docRef = await addDoc(collection(db, "exchangeRequests"), {
       userId,
@@ -56,8 +45,9 @@ export async function createExchangeRequest({
 
 // Отримати вхідні запити (які надіслали мені)
 export async function getIncomingRequests(
-  userId: string,
+  userId: string | undefined,
 ): Promise<ExchangeRequest[]> {
+  if (!userId) return [];
   try {
     const q = query(
       collection(db, "exchangeRequests"),

@@ -13,14 +13,12 @@ type ExchangeManagementProps = {
   isOpen: boolean;
   onClose: () => void;
   userId: string;
-  currentUserName?: string;
 };
 
 export default function ExchangeManagement({
   isOpen,
   onClose,
   userId,
-  currentUserName,
 }: ExchangeManagementProps) {
   const [activeTab, setActiveTab] = useState<"incoming" | "outgoing">(
     "incoming",
@@ -71,26 +69,30 @@ export default function ExchangeManagement({
     }
 
     const confirmExchange = window.confirm(
-      `Ви дійсно хочете передати книгу "${request.bookName}" користувачу ${request.senderName}?`,
+      `Ви дійсно хочете обміняти книгу "${request.bookName}" з користувачем ${request.senderName}?`,
     );
 
     if (!confirmExchange) return;
 
     try {
-      // Виконати обмін книги
+      // Розпарсити ID запропонованих книг
+      const offeredBookIds = request.offeredBooks
+        ? request.offeredBooks.split(", ").filter(Boolean)
+        : [];
+
+      // Виконати двосторонній обмін книги
       await performBookExchange(
         request.bookId,
         userId,
         request.senderId,
-        currentUserName || "Current Owner",
-        request.senderName,
+        offeredBookIds,
       );
 
       // Оновити статус запиту
       await updateRequestStatus(request.id, "accepted");
 
       await loadRequests();
-      alert("Обмін успішно виконано! Книга передана користувачу.");
+      alert("Обмін успішно виконано! Книги успішно змінили власників.");
     } catch (error) {
       console.error("Error accepting request:", error);
       alert(
