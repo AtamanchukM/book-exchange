@@ -249,13 +249,13 @@ function IncomingRequestsTab({
                 </div>
                 {req.bookName && (
                   <p className="text-sm text-gray-700 mb-1">
-                    <span className="font-medium">Книга:</span> {req.bookName}
+                    <span className="font-medium">Книга: </span> {req.bookName}
                   </p>
                 )}
                 {req.offeredBooks && (
                   <p className="text-sm text-gray-700 mb-2">
-                    <span className="font-medium">Пропонує:</span>{" "}
-                    {req.offeredBooks}
+                    <span className="font-medium">Пропонує: </span>
+                    {req.offeredBooksNames?.join(", ")}
                   </p>
                 )}
                 <p className="text-sm text-gray-600 mb-3">{req.message}</p>

@@ -80,6 +80,11 @@ export default function ExchangeWindow({
 
     setIsSubmitting(true);
     try {
+      // Отримати назви обраних книг
+      const offeredBooksNames = books
+        .filter((b) => selectedBooks.has(b.id))
+        .map((b) => b.name);
+
       // Створити запит на обмін
       await createExchangeRequest({
         userId: book.ownerId,
@@ -89,6 +94,7 @@ export default function ExchangeWindow({
         bookId: book.id,
         bookName: book.name,
         offeredBooks: Array.from(selectedBooks).join(", "),
+        offeredBooksNames,
         message,
       });
 

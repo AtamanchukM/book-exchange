@@ -7,6 +7,7 @@ export interface ExchangeRequest {
   bookId?: string; // яку книгу запитують
   bookName?: string;
   offeredBooks?: string; // що пропонують
+  offeredBooksNames?: string[]; // імена запропонованих книг
   message: string;
   status: "pending" | "accepted" | "rejected";
   createdAt: string;
