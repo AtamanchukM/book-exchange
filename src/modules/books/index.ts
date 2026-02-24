@@ -4,6 +4,7 @@ export { default as AddBookForm } from "./components/AddBookForm";
 export { default as DeleteBook } from "./components/DeleteBook";
 export { default as Details } from "./components/Details";
 export { default as ExchangeButton } from "./components/exchangeButton";
+export { default as FilterDropdown } from "./components/FilterDropdown";
 export { default as truncateText } from "./utils/truncateText";
 
 export * from "./hooks/useBooks";
@@ -19,3 +20,4 @@ export * from "./services/performExchange";
 
 export * from "./types/book.types";
 export * from "./utils/toLowerCase";
+export * from "./utils/searchFilters";

@@ -5,18 +5,18 @@ import BookList from "@/modules/books/components/BookList";
 import Container from "@/modules/common/Container";
 import { useUserBooks } from "@/modules/books/hooks/useUserBooks";
 import DeleteBook from "@/modules/books/components/DeleteBook";
-import {
-  useSearchStore,
-  filteredBooks,
-} from "@/modules/auth/stores/useSearchStore";
+import { useSearchStore } from "@/modules/auth/stores/useSearchStore";
+import { applyFilters } from "@/modules/books/utils/searchFilters";
 import AddBookForm from "@/modules/books/components/AddBookForm";
 
 export default function Mybooks() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const user = useAuthStore((state) => state.user);
   const query = useSearchStore((s) => s.query);
+  const filters = useSearchStore((s) => s.filters);
 
   const { books, loadMore, hasMore } = useUserBooks(user?.uid);
+  const filteredBooksList = applyFilters(books, query, filters);
   console.log(books);
 
   return (
@@ -31,7 +31,8 @@ export default function Mybooks() {
         </button>
       </div>
       <BookList
-        books={filteredBooks(books, query)}
+        books={filteredBooksList}
+        allBooks={books}
         loadMore={loadMore}
         hasMore={hasMore}
         renderActions={(book) => <DeleteBook id={book.id} />}

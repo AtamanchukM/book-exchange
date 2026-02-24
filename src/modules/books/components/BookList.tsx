@@ -3,11 +3,12 @@ import type { BookData } from "@/modules/books/types/book.types";
 import React from "react";
 import BookItem from "./BookItem";
 import Container from "@/modules/common/Container";
-import { CiFilter } from "react-icons/ci";
+import FilterDropdown from "./FilterDropdown";
 import { motion } from "motion/react";
 
 type BookListProps = {
   books: BookData[];
+  allBooks?: BookData[]; // for filter dropdown
   renderActions?: (book: BookData) => React.ReactNode;
   loading?: boolean;
   hasMore?: boolean;
@@ -16,6 +17,7 @@ type BookListProps = {
 
 export default function BookList({
   books,
+  allBooks,
   renderActions,
   loading,
   hasMore,
@@ -31,10 +33,7 @@ export default function BookList({
           </h3>
         </div>
         <div className="">
-          <button className="flex items-center px-4 py-2 space-x-2 transition-colors bg-white border rounded-lg shadow-sm border-stone-200 text-stone-600 hover:bg-stone-50">
-            <CiFilter size={24} />
-            <span>Фільтри</span>
-          </button>
+          <FilterDropdown books={allBooks || books} />
         </div>
       </div>
       <ul className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">

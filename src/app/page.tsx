@@ -4,14 +4,14 @@ import Image from "next/image";
 import mainBooks from "./assets/mainBooks.jpg";
 import BookList from "@/modules/books/components/BookList";
 import { useBooks } from "@/modules/books/hooks/useBooks";
-import {
-  useSearchStore,
-  filteredBooks,
-} from "@/modules/auth/stores/useSearchStore";
+import { useSearchStore } from "@/modules/auth/stores/useSearchStore";
+import { applyFilters } from "@/modules/books/utils/searchFilters";
 
 export default function Home() {
   const { books, loading, hasMore, loadMore } = useBooks();
   const query = useSearchStore((s) => s.query);
+  const filters = useSearchStore((s) => s.filters);
+  const filteredBooksList = applyFilters(books, query, filters);
   return (
     <section className="">
       <div className="flex lg:flex-row flex-col min-h-[70vh] bg-amber-50 mb-12 ">
@@ -48,7 +48,8 @@ export default function Home() {
         </div>
       </div>
       <BookList
-        books={filteredBooks(books, query)}
+        books={filteredBooksList}
+        allBooks={books}
         loading={loading}
         hasMore={hasMore}
         loadMore={loadMore}
